@@ -9,9 +9,9 @@
 [![GitHub Issues](https://img.shields.io/github/issues/OlegGorJ/service-config-data.svg)](https://github.com/OlegGorJ/service-config-data/issues)
 [![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/OlegGorJ/service-config-data.svg)](http://isitmaintained.com/project/OlegGorJ/service-config-data "Average time to resolve an issue")
 [![Percentage of issues still open](http://isitmaintained.com/badge/open/OlegGorJ/service-config-data.svg)](http://isitmaintained.com/project/OlegGorJ/service-config-data "Percentage of issues still open")
-[![Docker Stars](https://img.shields.io/docker/stars/oleggorj/openvpn.svg)](https://hub.docker.com/r/oleggorj/openvpn/)
-[![Docker Pulls](https://img.shields.io/docker/pulls/oleggorj/openvpn.svg)](https://hub.docker.com/r/oleggorj/openvpn/)
-[![ImageLayers](https://images.microbadger.com/badges/image/oleggorj/openvpn.svg)](https://microbadger.com/#/images/oleggorj/openvpn)
+[![Docker Stars](https://img.shields.io/docker/stars/oleggorj/service-config-data.svg)](https://hub.docker.com/r/oleggorj/service-config-data/)
+[![Docker Pulls](https://img.shields.io/docker/pulls/oleggorj/service-config-data.svg)](https://hub.docker.com/r/oleggorj/service-config-data/)
+[![ImageLayers](https://images.microbadger.com/badges/image/oleggorj/service-config-data.svg)](https://microbadger.com/#/images/oleggorj/service-config-data)
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/1818748c6ba745ce97bb43ab6dbbfd2c)](https://www.codacy.com/app/OlegGorj/service-config-data?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=OlegGorj/service-config-data&amp;utm_campaign=Badge_Grade)
 
