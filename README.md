@@ -81,7 +81,7 @@ The following environment variables must be set as part of `vars.mk` in order fo
 `vars.mk` file
 
 ```
-REPO?=github.ibm.com/AdvancedAnalyticsCanada/config-data
+REPO?=github.com/OlegGorJ/config-data
 GITACCOUNT?=<your git account>
 APITOKEN?=<your API Git token>
 CONFIGFILE?=services
