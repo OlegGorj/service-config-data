@@ -1,6 +1,7 @@
-# Service: service-config-data
+# Service to manage configuration data: service-config-data
 
-[![GitHub release](https://img.shields.io/github/release/qubyte/rubidium.svg)](https://github.com/OlegGorj/service-config-data/releases)
+[![GitHub release](https://img.shields.io/github/release/OlegGorj/service-config-data.svg)](https://github.com/OlegGorj/service-config-data/releases)
+[![GitHub issues](https://img.shields.io/github/issues/OlegGorj/service-config-data.svg)](https://github.com/OlegGorj/service-config-data/issues)
 [![GitHub commits](https://img.shields.io/github/commits-since/SubtitleEdit/subtitleedit/0.0.1.svg)](https://github.com/OlegGorj/service-config-data/commits)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/1818748c6ba745ce97bb43ab6dbbfd2c)](https://www.codacy.com/app/OlegGorj/service-config-data?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=OlegGorj/service-config-data&amp;utm_campaign=Badge_Grade)
 
