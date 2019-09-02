@@ -2,8 +2,7 @@
 
 [![GitHub release](https://img.shields.io/github/release/OlegGorj/service-config-data.svg)](https://github.com/OlegGorj/service-config-data/releases)
 [![GitHub issues](https://img.shields.io/github/issues/OlegGorj/service-config-data.svg)](https://github.com/OlegGorj/service-config-data/issues)
-[![GitHub commits](https://img.shields.io/github/commits-since/SubtitleEdit/subtitleedit/0.0.1.svg)](https://github.com/OlegGorj/service-config-data/commits)
-
+[![GitHub commits](https://img.shields.io/github/commits-since/OlegGorj/service-common-lib/0.1-alpha.svg)](https://github.com/OlegGorj/service-common-lib)
 
 [![Build Status](https://travis-ci.org/OlegGorj/service-config-data.svg?branch=master)](https://travis-ci.org/OlegGorj/service-config-data)
 [![GitHub Issues](https://img.shields.io/github/issues/OlegGorJ/service-config-data.svg)](https://github.com/OlegGorJ/service-config-data/issues)
