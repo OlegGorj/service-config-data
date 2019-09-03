@@ -1,0 +1,3 @@
+[submodule "service-common-lib"]
+	path = service-common-lib
+	url = https://github.ibm.com/AdvancedAnalyticsCanada/service-common-lib.git

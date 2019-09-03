@@ -172,7 +172,7 @@ helm del --purge config-service
 
 *This section needs updates*
 
-Note: internal IPs
+_Note:_ internal IPs
 
 Jenkins build job for [Master branch](http://10.0.0.11:8080/job/service-config_master/)
 
