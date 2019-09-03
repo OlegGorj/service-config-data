@@ -1,1 +1,13 @@
+tmp.*
 vars.mk
+service-config-data
+Dockerfile
+secret.yml
+tmp-secrets.yaml
+
+.DS_Store
+.idea
+credentials.json
+tmp*
+
+charts/service-config/values.yaml

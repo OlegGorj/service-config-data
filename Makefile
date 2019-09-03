@@ -26,6 +26,7 @@ clean:
 		rm -f ${APP}
 
 build: clean
+		echo "GOPATH: " ${GOPATH}
 		CGO_ENABLED=0 GOOS=${GOOS} GOARCH=${GOARCH} go build \
 			-ldflags "-s -w -X ${PROJECT}/version.Release=${RELEASE} \
 			-X ${PROJECT}/version.Commit=${COMMIT} -X ${PROJECT}/version.BuildTime=${BUILD_TIME}" \
@@ -37,7 +38,7 @@ run: container
 			-e "PORT=${PORT}" \
 			$(APP):$(RELEASE)
 
-push: container
+push:
 		docker push $(CONTAINER_IMAGE)
 
 
@@ -57,7 +58,7 @@ deploy:
 		echo "*** did you run 'make push'? ***"
 		echo ""
 		cd charts
-		helm upgrade --install config-service --values ./charts/service-config/values.yaml --namespace default  ./charts/service-config/
+		helm upgrade --install config-service --values ./service-config/values.yaml --namespace default  ./service-config/
 
 .PHONY: glide
 glide:
