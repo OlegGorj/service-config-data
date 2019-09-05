@@ -3,8 +3,8 @@ package gitutil
 
 import (
 	"fmt"
-	"github.ibm.com/AdvancedAnalyticsCanada/service-config-data/config-data-util/memfilesystem"
-	log "github.ibm.com/AdvancedAnalyticsCanada/service-common-lib/common/logging"
+	"github.com/oleggorj/service-config-data/config-data-util/memfilesystem"
+	log "github.com/oleggorj/service-common-lib/common/logging"
 
 	"gopkg.in/src-d/go-billy.v4"
 	"gopkg.in/src-d/go-billy.v4/memfs"
@@ -12,7 +12,6 @@ import (
 	"gopkg.in/src-d/go-git.v4/plumbing"
 	"gopkg.in/src-d/go-git.v4/plumbing/object"
 	"time"
-
 	//"gopkg.in/src-d/go-git.v4/plumbing/object"
 	"gopkg.in/src-d/go-git.v4/storage/memory"
 	"io/ioutil"
@@ -39,7 +38,6 @@ func GetRepoFromGit(gitAccount, apiToken, repoName, branch string) (billy.Filesy
 
 	fs := memfs.New()
 	storer := memory.NewStorage()
-
 	repo, err := git.Clone(storer, fs, &git.CloneOptions{
 		URL:           url,
 		ReferenceName: plumbing.ReferenceName(fmt.Sprintf("refs/heads/%s", branch)),

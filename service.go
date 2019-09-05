@@ -4,20 +4,20 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"github.ibm.com/AdvancedAnalyticsCanada/service-common-lib/common/config"
-	log "github.ibm.com/AdvancedAnalyticsCanada/service-common-lib/common/logging"
-	"github.ibm.com/AdvancedAnalyticsCanada/service-common-lib/common/util"
-	"github.ibm.com/AdvancedAnalyticsCanada/service-common-lib/service"
-	"github.ibm.com/AdvancedAnalyticsCanada/service-config-data/config-data-util/environment"
-	"github.ibm.com/AdvancedAnalyticsCanada/service-config-data/handlers"
+	"github.com/oleggorj/service-common-lib/common/config"
+	log "github.com/oleggorj/service-common-lib/common/logging"
+	"github.com/oleggorj/service-common-lib/common/util"
+	"github.com/oleggorj/service-common-lib/service"
+	"github.com/oleggorj/service-config-data/config-data-util/environment"
+	"github.com/oleggorj/service-config-data/handlers"
 	"github.com/gorilla/mux"
 	"io/ioutil"
 	"net/http"
 	"os"
 	"strings"
-	conf "github.ibm.com/AdvancedAnalyticsCanada/service-config-data/config-data-util"
+	conf "github.com/oleggorj/service-config-data/config-data-util"
 
-	"github.ibm.com/AdvancedAnalyticsCanada/service-config-data/gitutil"
+	"github.com/oleggorj/service-config-data/gitutil"
 )
 
 
