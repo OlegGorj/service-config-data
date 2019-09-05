@@ -15,7 +15,10 @@ IMAGE?=${REGISTRY}/${APP}:${RELEASE}
 
 PORT?=8000
 NODE_PORT?=30083
+
 ENV?=SANDBOX
+
+K8S_CHART?=config-service
 K8S_NAMESPACE?=default
 NODESELECTOR?=services
 
@@ -35,11 +38,12 @@ run: container
 			-e "PORT=${PORT}" \
 			$(APP):$(RELEASE)
 
-push:
+push: container
 		docker push $(IMAGE)
 
 container: build
-		for t in $(shell find ./service-common-lib/docker/ -type f -name "Dockerfile.goservice.template"); do \
+	# generate dockerfile from template
+		for t in $(shell find ../service-common-lib/docker/ -type f -name "Dockerfile.goservice.template"); do \
 					cat $$t | \
 						sed -E "s/{{ .PORT }}/$(PORT)/g" | \
 						sed -E "s/{{ .ServiceName }}/$(APP)/g"; \
@@ -47,14 +51,15 @@ container: build
 		docker build -t $(IMAGE) .
 
 deployclean:
-		-helm del --purge config-service
+		-helm del --purge ${K8S_CHART}
 
 deploy:
 		echo ""
 		echo "*** did you run 'make push'? ***"
 		echo ""
+		# TODO generate values.yaml file from template
 		cd charts
-		helm upgrade --install config-service --values .charts/service-config/values.yaml --namespace default  ./service-config/
+		helm upgrade --install ${K8S_CHART} --values ./charts/service-config/values.yaml --namespace ${K8S_NAMESPACE}  ./charts/service-config/
 
 .PHONY: glide
 glide:

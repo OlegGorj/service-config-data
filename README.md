@@ -1,4 +1,4 @@
-# Service to manage configuration data: service-config-data
+# Service to manage configuration data (service-config-data)
 
 [![GitHub release](https://img.shields.io/github/release/OlegGorj/service-config-data.svg)](https://github.com/OlegGorj/service-config-data/releases)
 [![GitHub issues](https://img.shields.io/github/issues/OlegGorj/service-config-data.svg)](https://github.com/OlegGorj/service-config-data/issues)
