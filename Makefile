@@ -49,6 +49,7 @@ container: build
 						sed -E "s/{{ .ServiceName }}/$(APP)/g"; \
 		done > ./Dockerfile
 		docker build -t $(IMAGE) .
+		rm Dockerfile
 
 deployclean:
 		-helm del --purge ${K8S_CHART}
@@ -63,7 +64,7 @@ deploy:
 		done > ./charts/${K8S_CHART}/values.yaml
 		cd charts
 		helm upgrade --install ${K8S_CHART} --values ./charts/${K8S_CHART}/values.yaml --namespace ${K8S_NAMESPACE}  ./charts/${K8S_CHART}/
-		#rm ./charts/${K8S_CHART}/values.yaml
+		rm ./charts/${K8S_CHART}/values.yaml
 
 .PHONY: glide
 glide:
