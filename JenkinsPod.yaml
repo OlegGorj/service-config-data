@@ -1,0 +1,40 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    jenkins/kube-default: "true"
+    app: jenkins
+    component: agent
+spec:
+  serviceAccountName: cicd-jenkins
+  containers:
+    - name: jnlp
+      image: jenkins/jnlp-slave:3.27-1
+      imagePullPolicy: Always
+      env:
+      - name: POD_IP
+        valueFrom:
+          fieldRef:
+            fieldPath: status.podIP
+      - name: DOCKER_HOST
+        value: tcp://localhost:2375
+    - name: helm
+      image: alpine/helm:2.13.1
+      command:
+        - cat
+      tty: true
+    - name: dind
+      image: docker:18.05-dind
+      securityContext:
+        privileged: true
+      volumeMounts:
+        - name: dind-storage
+          mountPath: /var/lib/docker
+    - name: integration-test-image
+      image: robcherry/docker-chromedriver:headless
+      command:
+        - cat
+      tty: true
+  volumes:
+    - name: dind-storage
+      emptyDir: {}
