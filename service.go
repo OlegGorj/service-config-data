@@ -147,7 +147,6 @@ func ApiHandler(rw http.ResponseWriter, req *http.Request) {
 	rw.WriteHeader(http.StatusOK)
 }
 
-
 func initializeEnvironment()  {
 	for _, envName := range confEnvNames {
 
@@ -156,23 +155,20 @@ func initializeEnvironment()  {
 			log.Info("Branch ", envName, " not intialized")
 			continue
 		}
-
 		ConfMappingOfEnvs[envName] = &environment.Environment{
 			FileSystem: fs,
 			Repository: repo,
 		}
 
 		// Get the users
-		arrayUserBytes, err := gitutil.GetFileFromRepo(fs, "users.json")
-
-		if err == nil {
-			_ = ConfMappingOfEnvs[envName].Users.CreateAllUsers(arrayUserBytes)
-		}
+		//arrayUserBytes, err := gitutil.GetFileFromRepo(fs, "users.json")
+		//if err == nil {
+		//	_ = ConfMappingOfEnvs[envName].Users.CreateAllUsers(arrayUserBytes)
+		//}
 	}
 
 
 }
-
 
 //
 func KeyHandler(rw http.ResponseWriter, req *http.Request) {
@@ -208,10 +204,10 @@ func KeyHandler(rw http.ResponseWriter, req *http.Request) {
 
 	rw.WriteHeader(http.StatusOK)
 }
-////@params
-////
-////@return
-////
+//@params
+//
+//@return
+//
 func getValue(key string) (string, error){
 	if serviceDebugFlag == true {
 		log.Debug( githubAccount," ", githubApiToken, " ",githubRepoName, " ",githubBranch, " ",githubConfigFile)
@@ -219,16 +215,12 @@ func getValue(key string) (string, error){
 	configFile, err := config.GetGitRepoConfigFile(githubAccount, githubApiToken, githubRepoName, githubBranch, githubConfigFile)
 
 	if err != nil { return "", fmt.Errorf("ERROR: error retriving configuration: %v", err) }
-
 	if configFile == "" { return "", fmt.Errorf("Can not resolve temp file name.") }
 
 	// reading config file into Viper interface
 	v, err := config.ReadConfig(configFile)
-
 	if err != nil { return "", fmt.Errorf("Error when reading config: %v\n", err) }
-
 	if serviceDebugFlag == true {
-
 		c := v.AllKeys()
 		for i := 0; i < len(c) ; i++ {
 			log.Debug( c[i] + " -> " + fmt.Sprintf("%s", v.Get(c[i])) )

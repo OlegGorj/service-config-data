@@ -54,7 +54,7 @@ container: build
 deployclean:
 		-helm del --purge ${K8S_CHART}
 
-deploy:
+deploy: push
 		echo ""
 		echo "*** did you run 'make push'? ***"
 		echo ""

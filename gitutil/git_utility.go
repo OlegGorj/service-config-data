@@ -46,8 +46,6 @@ func GetRepoFromGit(gitAccount, apiToken, repoName, branch string) (billy.Filesy
 		SingleBranch:  true,
 		Progress:      os.Stdout,
 	})
-
-
 	if err != nil {
 		return nil, nil, err
 	}
@@ -58,18 +56,13 @@ func GetRepoFromGit(gitAccount, apiToken, repoName, branch string) (billy.Filesy
 func GetFileFromRepo(fs billy.Filesystem, file_name string) ([]byte, error) {
 
 	f, err := fs.Open(file_name)
-
 	if err != nil {
-
 		log.Info("File ", file_name, " doesn't exist")
 		log.Fatal(err)
-
 		return nil, err
 	}
 
-
 	contents, err := ioutil.ReadAll(f)
-
 	if err != nil {
 		log.Info("Problem with reading file contents")
 		log.Info(err)
@@ -96,36 +89,27 @@ func GetFileFromRepo(fs billy.Filesystem, file_name string) ([]byte, error) {
 
 // TODO: Add extract kernels utility from memfs
 // 	- Might be better to but this in a different package
-
 func UpdateFileOnGitRepo(repo git.Repository, fs billy.Filesystem, filePath string) error {
-
 	w, _ := (repo).Worktree()
-
 	bytes, _ := memfilesystem.ReadFile(fs, filePath)
 	fmt.Println("AFTER ", string(bytes))
-
 	_ , _ = w.Add(filePath)
 
-	// FIXME: Change name of committer
 	_, err := w.Commit("test commit", &git.CommitOptions{
 		Author: &object.Signature{
-			Name:  "Perrier Gang",
-			Email: "PerrierGang@ibm.com",
+			Name:  "serviceaccount-config-data",
+			Email: "serviceaccount-config-data@gmail.com",
 			When:  time.Now(),
 		},
 	})
-
 	if err != nil {
 		return fmt.Errorf("Error comitting data to repo")
 	}
 
 	err = (repo).Push(&git.PushOptions{})
-
 	if err != nil {
 		log.Info(err)
 		return fmt.Errorf("Error pushing data to repo")
 	}
-
 	return nil
-
 }
