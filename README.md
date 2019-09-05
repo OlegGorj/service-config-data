@@ -22,10 +22,27 @@ The `service-config-data` service designed to provide configuration management c
 ## Directory structure
 
 ```
-├── service-config-data
-    ├── Dockerfile
+── service-config-data
+    ├── JenkinsPod.yaml
+    ├── Jenkinsfile
     ├── Makefile
+    ├── OWNERS
+    ├── OWNERS_ALIASES
     ├── README.md
+    ├── charts
+    │   ├── preview
+    │   │   ├── Chart.yaml
+    │   │   ├── Makefile
+    │   │   ├── requirements.yaml
+    │   │   └── values.yaml
+    │   └── service-config
+    │       ├── Chart.yaml
+    │       ├── requirements.yaml
+    │       ├── templates
+    │       │   ├── deployment.yaml
+    │       │   ├── image-pull-secret.yaml
+    │       │   └── service.yaml
+    │       └── values-template.yaml
     ├── config-data-util
     │   ├── config_structs.go
     │   ├── data_utility.go
@@ -34,10 +51,11 @@ The `service-config-data` service designed to provide configuration management c
     │   ├── kernel
     │   │   ├── kernel.go
     │   │   └── kernel_test.go
+    │   ├── memfilesystem
+    │   │   └── memfilesystem.go
     │   └── user
     │       ├── user.go
     │       └── user_test.go
-    ├── credentials_template.json
     ├── gitutil
     │   ├── git_utility.go
     │   ├── git_utility_test.go
@@ -58,16 +76,16 @@ The `service-config-data` service designed to provide configuration management c
     │   └── userHandler_test.go
     ├── helpers
     │   └── helpers.go
+    ├── service-common-lib
+    │   └── common
+    │       └── config
+    │           └── config.go
+    ├── service-config-data
     ├── service.go
-    ├── tmp.yaml
+    ├── skaffold.yaml
+    ├── vars-gcp.mk
     ├── vars.mk
-    └── yaml
-        ├── deployment.yaml
-        ├── secretBluemixDefault.yaml
-        ├── secretBluemixDefaultInternational.yaml
-        ├── secretBluemixDefaultRegional.yaml
-        ├── secretPullImage.yaml
-        └── service.yaml
+    └── watch.sh
 ```
 ---
 
