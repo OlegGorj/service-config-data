@@ -1,25 +1,22 @@
-
-
 COMMIT?=$(shell git rev-parse --short HEAD)
 BUILD_TIME?=$(shell date -u '+%Y-%m-%d_%H:%M:%S')
-CONTAINER_IMAGE?=registry.ng.bluemix.net/${REGISTRY_NAMESPACE}/${APP}:${RELEASE}
 GOOS?=linux
 GOARCH?=amd64
 
-#include ./service-common-lib/Makefile
+include vars-gcp.mk
 
 APP?=service-config-data
 APIVER?="v2"
-REGISTRY?=registry.ng.bluemix.net
-REGISTRY_NAMESPACE?=etl-namespace
+#REGISTRY?=registry.ng.bluemix.net
+#REGISTRY_NAMESPACE?=etl-namespace
+
+RELEASE?=1.0
+IMAGE?=${REGISTRY}/${APP}:${RELEASE}
+
 PORT?=8000
 NODE_PORT?=30083
 ENV?=SANDBOX
 K8S_NAMESPACE?=default
-RELEASE?=1.1
-REPO?=github.ibm.com/AdvancedAnalyticsCanada/config-data.git
-
-CONTAINER_IMAGE?=${REGISTRY}/${REGISTRY_NAMESPACE}/${APP}:${RELEASE}
 NODESELECTOR?=services
 
 clean:
@@ -39,8 +36,7 @@ run: container
 			$(APP):$(RELEASE)
 
 push:
-		docker push $(CONTAINER_IMAGE)
-
+		docker push $(IMAGE)
 
 container: build
 		for t in $(shell find ./service-common-lib/docker/ -type f -name "Dockerfile.goservice.template"); do \
@@ -48,7 +44,7 @@ container: build
 						sed -E "s/{{ .PORT }}/$(PORT)/g" | \
 						sed -E "s/{{ .ServiceName }}/$(APP)/g"; \
 		done > ./Dockerfile
-		docker build -t $(CONTAINER_IMAGE) .
+		docker build -t $(IMAGE) .
 
 deployclean:
 		-helm del --purge config-service
@@ -58,7 +54,7 @@ deploy:
 		echo "*** did you run 'make push'? ***"
 		echo ""
 		cd charts
-		helm upgrade --install config-service --values ./service-config/values.yaml --namespace default  ./service-config/
+		helm upgrade --install config-service --values .charts/service-config/values.yaml --namespace default  ./service-config/
 
 .PHONY: glide
 glide:

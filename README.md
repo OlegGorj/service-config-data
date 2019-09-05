@@ -86,6 +86,12 @@ APITOKEN?=<your API Git token>
 CONFIGFILE?=services
 ```
 
+### 0. Build service runtime from Go code
+
+```
+make build
+```
+
 ### 1. Build image and push to registry
 
 ```
