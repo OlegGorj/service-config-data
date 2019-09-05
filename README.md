@@ -70,21 +70,93 @@ The `service-config-data` service designed to provide configuration management c
         └── service.yaml
 ```
 ---
-## TODO: THIS NEEDS TO GET UPDATED
-## How to deploy service
+
+## How to deploy Config Service
 
 ### Prerequisites:
 
-The following environment variables must be set as part of `vars.mk` in order for service to compile and run properly:
+Setup GOPATH:
 
-`vars.mk` file
+```
+echo $GOPATH
+export GOPATH=$GOPATH:$PWD
+echo $GOPATH
+```
+
+Install common package:
+
+```
+go get -u github.com/oleggorj/service-common-lib
+```
+
+Install `service-config-data` package:
+
+```
+go get -u github.com/oleggorj/service-config-data
+```
+
+Build `service-config-data` service binaries:
+
+```
+cd service-config-data
+make build
+```
+
+### Deployment of GCP:
+
+The following environment variables must be set as part of `vars-gcp.mk` in order for service to compile and run properly:
+
+`vars-gcp.mk` file
 
 ```
 REPO?=github.com/OlegGorJ/config-data
-GITACCOUNT?=<your git account>
-APITOKEN?=<your API Git token>
+GITACCOUNT?=
+APITOKEN?=
 CONFIGFILE?=services
+REGISTRY?=oleggorj
 ```
+
+Initialize GCP environment:
+
+```
+gcloud auth login
+```
+
+List available kubernetes clusters:
+
+```
+gcloud container clusters list
+```
+
+Example of output:
+
+```
+NAME                      LOCATION       MASTER_VERSION  MASTER_IP      MACHINE_TYPE   NODE_VERSION   NUM_NODES  STATUS
+cluster-services-sandbox  us-central1-a  1.13.7-gke.19   35.184.197.12  n1-standard-1  1.13.7-gke.19  3          RUNNING
+```
+
+Than, create `tiller` service account and cluster buinding:
+
+```
+kubectl create serviceaccount --namespace kube-system tiller
+kubectl create clusterrolebinding tiller-cluster-rule --clusterrole=cluster-admin --serviceaccount=kube-system:tiller
+```
+
+And, finally, initialize Helm:
+
+```
+helm init --service-account tiller --upgrade
+```
+
+Last step to build service binaries, create image, push image to docker repo and deploy Helm chart:
+
+```
+cd service-config-data
+make deploy
+```
+
+
+## Manual step-by-step deployment
 
 ### 0. Build service runtime from Go code
 
