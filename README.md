@@ -116,7 +116,7 @@ go get -u github.com/oleggorj/service-config-data
 Build `service-config-data` service binaries:
 
 ```
-cd service-config-data
+cd src/github.com/oleggorj/service-config-data
 make build
 ```
 
