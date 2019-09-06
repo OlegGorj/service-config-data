@@ -12,7 +12,7 @@
 [![Docker Pulls](https://img.shields.io/docker/pulls/oleggorj/service-config-data.svg)](https://hub.docker.com/r/oleggorj/service-config-data/)
 
 
-[![Docker Build Status](https://img.shields.io/docker/build/oleggorj/service-config-data.svg)](https://img.shields.io/docker/build/oleggorj/service-config-data)
+[![Docker Build Status](https://dockerbuildbadges.quelltext.eu/status.svg?organization=oleggorj&repository=service-config-data)](https://img.shields.io/docker/build/oleggorj/service-config-data)
 
 
 
