@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"fmt"
+	_ "fmt"
 	"github.com/gorilla/mux"
 	"net/http"
 	"strings"
@@ -9,7 +9,7 @@ import (
 	conf "github.com/oleggorj/service-config-data/config-data-util"
 
 	"github.com/oleggorj/service-config-data/config-data-util/memfilesystem"
-	"github.com/oleggorj/service-config-data/config-data-util/key"
+	_ "github.com/oleggorj/service-config-data/config-data-util/key"
 )
 
 type KeyHandler struct {
@@ -39,11 +39,18 @@ func (u *KeyHandler) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
 
 	if req.Method == http.MethodGet {
 		// read a key
-		var k key.Keys
 		fs := &environment.FileSystem
-		bytes, _ := memfilesystem.ReadFile(*fs, appValue + ".json")
-		environment.Keys , _ = k.Init( bytes )
-		val, _ := environment.Keys.Read(keyValue)
+		bytes, err := memfilesystem.ReadFile(*fs, appValue + ".json")
+		if err != nil {
+		    log.Error(err)
+		}
+		if environment.Keys.Init( bytes ) != nil {
+		    log.Error(err)
+		}
+		val, err := environment.Keys.Read(keyValue)
+		if err != nil {
+		    log.Error(err)
+		}
 		//fmt.Println("Keys Read:  " + keyValue + ", val:" + val )
 		rw.Write([]byte(val))
 		rw.WriteHeader(http.StatusOK)

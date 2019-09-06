@@ -15,23 +15,22 @@ type Key struct {
 	Val string
 }
 
-func (keys *Keys) Init(jsonBuffer []byte) (Keys, error){
+func (keys *Keys) Init(jsonBuffer []byte) ( error){
 	//fmt.Println("AFTER ", string(jsonBuffer))
 	keys_arr := make(map[string]interface{})
 	err := json.Unmarshal(jsonBuffer, &keys_arr)
 	if err != nil {
 	    log.Error(err)
+			return err
 	}
-	var allkeys Keys
+	//var allkeys Keys
 	for j_key, j_value := range keys_arr {
 			var k Key
 			k.Key = j_key
 			k.Val = fmt.Sprintf("%s", j_value )
-			allkeys = append(allkeys, k)
-			//fmt.Println("key : ", k.Key, " value : ", k.Val)
+			(*keys) = append( (*keys), k)
   }
-
-	return allkeys, nil
+	return nil
 }
 
 func (keys *Keys) Read(key string) (string, error){
