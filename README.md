@@ -12,9 +12,9 @@
 [![Docker Pulls](https://img.shields.io/docker/pulls/oleggorj/service-config-data.svg)](https://hub.docker.com/r/oleggorj/service-config-data/)
 
 
-[![Docker Build Status](https://img.shields.io/docker/build/oleggorj/service-config-data)](https://img.shields.io/docker/build/oleggorj/service-config-data.svg)
+[![Docker Build Status](https://img.shields.io/docker/build/oleggorj/service-config-data.svg)](https://img.shields.io/docker/build/oleggorj/service-config-data)
 
-[![Docker Builds](https://dockerbuildbadges.quelltext.eu/status.svg?organization=oleggorj&repository=service-config-data)](https://dockerbuildbadges.quelltext.eu/status.svg?organization=oleggorj&repository=service-config-data)
+
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/1818748c6ba745ce97bb43ab6dbbfd2c)](https://www.codacy.com/app/OlegGorj/service-config-data?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=OlegGorj/service-config-data&amp;utm_campaign=Badge_Grade)
 
