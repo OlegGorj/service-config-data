@@ -13,7 +13,7 @@
 
 [![ImageLayers](https://images.microbadger.com/badges/image/oleggorj/service-config-data.svg)](https://microbadger.com/#/images/oleggorj/service-config-data)
 
-![Docker Build Status](https://img.shields.io/docker/build/oleggorj/service-config-data)
+[![Docker Build Status](https://img.shields.io/docker/build/oleggorj/service-config-data)](https://img.shields.io/docker/build/oleggorj/service-config-data.svg)
 
 
 
