@@ -42,9 +42,7 @@ var (
 func init() {
 
 	serviceAppName = "service-config-data"
-
 	log.SetAppName(serviceAppName)
-
 	args := os.Args
 
 	if len(args) == 1 {
@@ -55,17 +53,18 @@ func init() {
 		}
 		githubAccount = util.GetENV("GITACCOUNT")
 		if githubAccount == "" {
-			log.Warn("ERROR: GITACCOUNT is required")
+			log.Warn("warning: GITACCOUNT is required")
 		}
 		githubApiToken = util.GetENV("APITOKEN")
 		if githubApiToken == "" {
-			log.Warn("ERROR: git APITOKEN is required")
+			log.Warn("warning: git APITOKEN is required")
 		}
 		serviceApiVersion = util.GetENV("APIVER")
 		if serviceApiVersion == "" {
-			log.Fatal("ERROR: service APIVER is required")
+			log.Warn("warning: service APIVER is required")
 		}
 
+		// init list of branches
 		confEnvNames = []string{"dev", "sandbox"}
 
 	} else if args[1] == "dev" {
@@ -93,20 +92,17 @@ func init() {
 
 	servicePort = util.GetENV("PORT")
 	if servicePort == "" {
-		servicePort = "8000"
+		servicePort = "8000" // set default part number
 	}
 
 	githubBranch = util.GetENV("GITBRANCH") ; if githubBranch == "" { githubBranch = "sandbox" }
-	configFormat = util.GetENV("FORMAT")
-	if configFormat == "" { configFormat = "json" }
+	configFormat = util.GetENV("FORMAT") ; if configFormat == "" { configFormat = "json" }
 	configFile := util.GetENV("CONFIGFILE") ; if configFile == "" { configFile = "services" }
 
-
 	ConfMappingOfEnvs = make(conf.MappingToEnv)
-
 	initializeEnvironment()
-
 }
+
 
 func main() {
 
@@ -124,8 +120,8 @@ func main() {
 	service.RegisterHandler("/api/v2/configs/{environment}/users/{email}", "DELETE", &handlers.UserHandler{Environments: ConfMappingOfEnvs})
 	service.RegisterHandler("/api/v2/configs/{environment}/users/{email}", "POST", &handlers.UserHandler{Environments: ConfMappingOfEnvs})
 	service.RegisterHandler("/api/v2/configs/{environment}/users/{email}", "PUT", &handlers.UserHandler{Environments: ConfMappingOfEnvs})
-	//service.RegisterHandler("/api/v2/configs", "GET", &handlers.ConfEnvHandler{Environments:ConfMappingOfEnvs})
 	service.RegisterHandler("/api/v1/kernels/{environment}", "GET", &handlers.KernelHandler{Environments: ConfMappingOfEnvs})
+	service.RegisterHandler("/api/v2/{app}/{env}/{key}", "GET", &handlers.KeyHandler{Environments: ConfMappingOfEnvs})
 
 	service.StartServer(servicePort)
 
@@ -152,7 +148,8 @@ func initializeEnvironment()  {
 
 		fs, repo, err := gitutil.GetRepoFromGit(githubAccount, githubApiToken, githubRepoName, envName)
 		if err != nil {
-			log.Info("Branch ", envName, " not intialized")
+			log.Info("Branch ", envName, " not intialized ")
+			log.Info(err)
 			continue
 		}
 		ConfMappingOfEnvs[envName] = &environment.Environment{
@@ -166,8 +163,6 @@ func initializeEnvironment()  {
 		//	_ = ConfMappingOfEnvs[envName].Users.CreateAllUsers(arrayUserBytes)
 		//}
 	}
-
-
 }
 
 //
@@ -197,7 +192,6 @@ func KeyHandler(rw http.ResponseWriter, req *http.Request) {
 
 	// set config file
 	githubConfigFile = the_app + ".json"
-
 	val, err := getValue(the_key)
 	if err != nil { rw.WriteHeader(http.StatusInternalServerError) ; return }
 	_, _ = rw.Write( []byte( val ))
@@ -213,13 +207,13 @@ func getValue(key string) (string, error){
 		log.Debug( githubAccount," ", githubApiToken, " ",githubRepoName, " ",githubBranch, " ",githubConfigFile)
 	}
 	configFile, err := config.GetGitRepoConfigFile(githubAccount, githubApiToken, githubRepoName, githubBranch, githubConfigFile)
-
 	if err != nil { return "", fmt.Errorf("ERROR: error retriving configuration: %v", err) }
 	if configFile == "" { return "", fmt.Errorf("Can not resolve temp file name.") }
 
 	// reading config file into Viper interface
 	v, err := config.ReadConfig(configFile)
 	if err != nil { return "", fmt.Errorf("Error when reading config: %v\n", err) }
+	// debug part of endpoint
 	if serviceDebugFlag == true {
 		c := v.AllKeys()
 		for i := 0; i < len(c) ; i++ {
