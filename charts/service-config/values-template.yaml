@@ -6,16 +6,19 @@ cleanup:
     helm.sh/hook: pre-delete
     helm.sh/hook-delete-policy: hook-succeeded
 
-imagePullSecrets: image-pull-secret-ibm-cloud
+secretsibmcloud:
+  enabled: false
+  imagePullSecrets: image-pull-secret-ibm-cloud
 
 service:
   name: {{ .ServiceName }}
   type: LoadBalancer
   externalPort: 8000
   containerPort: 8000
+  nodePort: 31070
   replicaCount: 1
 
-  GITACCOUNT: OlegGorJ
+  GITACCOUNT:
   APITOKEN:
   GITREPO: "github.com/OlegGorJ/config-data.git"
 
@@ -24,7 +27,7 @@ service:
   Environment: sandbox
   K8s_namespace: default
   APIVER: v1
-  NodeSelector: services
+  #NodeSelector: services
 
 image:
   repository: "oleggorj/service-config-data:1.0"
