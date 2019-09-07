@@ -1,5 +1,5 @@
 tmp.*
-vars.mk
+vars*.mk
 service-config-data
 Dockerfile
 secret.yml
