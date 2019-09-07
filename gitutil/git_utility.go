@@ -27,14 +27,13 @@ type GitCredentials struct {
 }
 
 func GetRepoFromGit(gitAccount, apiToken, repoName, branch string) (billy.Filesystem, *git.Repository, error) {
-	url := nil
-	if gitAccount != nil {
-		url := fmt.Sprintf("https://%s:%s@%s", gitAccount, apiToken, repoName)
-		log.Info("Cloning ", repoName, " ..")
-		log.Info("Cloning ", url, " ..")
+	url := ""
+	if gitAccount != "" {
+		url = fmt.Sprintf("https://%s:%s@%s", gitAccount, apiToken, repoName)
 	}else{
-		url := fmt.Sprintf("https://%s", repoName)
+		url = fmt.Sprintf("https://%s", repoName)
 	}
+	log.Info("Cloning " + url)
 
 	fs := memfs.New()
 	storer := memory.NewStorage()
