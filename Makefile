@@ -33,10 +33,10 @@ build: clean
 			-o ${APP}
 
 run: container
-		docker stop $(APP):$(RELEASE) || true && docker rm $(APP):$(RELEASE) || true
+		docker stop ${APP} || true && docker rm ${APP} || true
 		docker run --name ${APP} -p ${PORT}:${PORT} --rm \
 			-e "PORT=${PORT}" \
-			$(APP):$(RELEASE)
+			$(IMAGE)
 
 push: container
 		docker push $(IMAGE)
