@@ -8,7 +8,7 @@ include vars-gcp.mk
 APP?=service-config-data
 APIVER?="v2"
 
-RELEASE?=1.1
+RELEASE?=1.2
 IMAGE?=${REGISTRY}/${APP}:${RELEASE}
 
 PORT?=8000
