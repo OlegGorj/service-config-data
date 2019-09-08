@@ -10,14 +10,16 @@ import (
 	"github.com/oleggorj/service-common-lib/service"
 	"github.com/oleggorj/service-config-data/config-data-util/environment"
 	"github.com/oleggorj/service-config-data/handlers"
+	conf "github.com/oleggorj/service-config-data/config-data-util"
+	"github.com/oleggorj/service-config-data/gitutil"
+
+	"github.com/spf13/viper"
+
 	"github.com/gorilla/mux"
 	"io/ioutil"
 	"net/http"
 	"os"
 	"strings"
-	conf "github.com/oleggorj/service-config-data/config-data-util"
-
-	"github.com/oleggorj/service-config-data/gitutil"
 )
 
 
@@ -41,10 +43,16 @@ var (
 
 func init() {
 
+	viper.SetConfigName("config")
+	viper.AddConfigPath(".") ; viper.AddConfigPath("/")
+	err := viper.ReadInConfig()
+	if err != nil {
+		panic(fmt.Errorf("Fatal error config file: %s \n", err))
+	}
+
 	serviceAppName = "service-config-data"
 	log.SetAppName(serviceAppName)
 	args := os.Args
-
 	if len(args) == 1 {
 
 		githubRepoName = util.GetENV("REPO")
