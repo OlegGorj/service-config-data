@@ -7,10 +7,8 @@ include vars-gcp.mk
 
 APP?=service-config-data
 APIVER?="v2"
-#REGISTRY?=registry.ng.bluemix.net
-#REGISTRY_NAMESPACE?=etl-namespace
 
-RELEASE?=1.0
+RELEASE?=1.1
 IMAGE?=${REGISTRY}/${APP}:${RELEASE}
 
 PORT?=8000
@@ -50,6 +48,7 @@ container: build
 		done > ./Dockerfile
 		docker build -t $(IMAGE) .
 		rm Dockerfile
+		rm -f ${APP}
 
 deployclean:
 		-helm del --purge ${K8S_CHART}

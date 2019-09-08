@@ -117,7 +117,7 @@ go get -u github.com/oleggorj/service-config-data
 Build `service-config-data` service binaries:
 
 ```
-cd src/github.com/oleggorj/service-config-data
+cd ./src/github.com/oleggorj/service-config-data
 make build
 ```
 
@@ -151,10 +151,10 @@ Example of output:
 
 ```
 NAME                      LOCATION       MASTER_VERSION  MASTER_IP      MACHINE_TYPE   NODE_VERSION   NUM_NODES  STATUS
-cluster-services-sandbox  us-central1-a  1.13.7-gke.19   35.184.197.12  n1-standard-1  1.13.7-gke.19  3          RUNNING
+cluster-services-sandbox  us-central1-a  1.13.7-gke.19   00.000.000.00  n1-standard-1  1.13.7-gke.19  3          RUNNING
 ```
 
-Than, create `tiller` service account and cluster buinding:
+Than, create `tiller` service account and cluster binding:
 
 ```
 kubectl create serviceaccount --namespace kube-system tiller
@@ -170,7 +170,7 @@ helm init --service-account tiller --upgrade
 Last step to build service binaries, create image, push image to docker repo and deploy Helm chart:
 
 ```
-cd service-config-data
+cd $GOPATH/src/github.com/oleggorj/service-config-data
 make deploy
 ```
 
