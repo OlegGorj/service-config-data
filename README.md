@@ -281,9 +281,11 @@ service-config-data
 ```
 ---
 
-# Deploy service on K8S cluster
+# Deploy service on K8s cluster using Helm chart
 
-Make sure values file `./service-config/values.yaml` is populated based on template `./service-config/values-template.yaml`
+Make sure values file `./service-config/values.yaml` is populated based on template `../service-common-lib/docker/values-template.yaml`
+
+If you're having trouble understanding what values should be in `values.yaml`, refer to `Makefile` - it generates `values.yaml` in section `deploy`
 
 Deploy service by executing the following
 
