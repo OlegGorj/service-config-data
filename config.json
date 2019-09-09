@@ -1,0 +1,21 @@
+{
+  "service": {
+    "name" : "service-config-data",
+    "port" : "8000",
+    "apiver" : "2",
+
+    "backend":{
+      "type": "git",
+      "repo" : "github.com/OlegGorJ/config-data.git",
+      "account" : "",
+      "token" : "",
+      "git-creds-file": "credentials.json",
+      "branches": [
+        "dev",
+        "sandbox",
+        "qa"
+      ]
+    }
+
+  }
+}

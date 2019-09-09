@@ -50,34 +50,32 @@ func init() {
 		panic(fmt.Errorf("Fatal error config file: %s \n", err))
 	}
 
-	serviceAppName = viper.GetString("service.name") // "service-config-data"
+	serviceAppName = viper.GetString("service.name")
 	log.SetAppName(serviceAppName)
 	args := os.Args
 	if len(args) == 1 {
 
-		githubRepoName = viper.GetString("service.backend.repo") // util.GetENV("REPO")
+		githubRepoName = viper.GetString("service.backend.repo")
 		if githubRepoName == "" {
 			log.Fatal("ERROR: REPO name is required")
 		}
-		githubAccount = viper.GetString("service.backend.account") // util.GetENV("GITACCOUNT")
+		githubAccount = viper.GetString("service.backend.account")
 		if githubAccount == "" {
 			log.Warn("warning: GITACCOUNT is required")
 		}
-		githubApiToken = viper.GetString("service.backend.token") // util.GetENV("APITOKEN")
+		githubApiToken = viper.GetString("service.backend.token")
 		if githubApiToken == "" {
 			log.Warn("warning: git APITOKEN is required")
 		}
-		serviceApiVersion = viper.GetString("service.apiver") // util.GetENV("APIVER")
+		serviceApiVersion = viper.GetString("service.apiver")
 		if serviceApiVersion == "" {
 			log.Warn("warning: service APIVER is required")
 		}
 
 		// init list of branches
-		//confEnvNames = []string{"dev", "sandbox"}
 		confEnvNames = []string{}
 		err := viper.UnmarshalKey("service.backend.branches", &confEnvNames)
-
-		fmt.Printf("%v, %#v\n", err, confEnvNames)
+		log.Debug("Branches from config: %v, %#v", err, confEnvNames)
 
 	} else if args[1] == "dev" {
 
@@ -161,10 +159,13 @@ func initializeEnvironment()  {
 
 		fs, repo, err := gitutil.GetRepoFromGit(githubAccount, githubApiToken, githubRepoName, envName)
 		if err != nil {
-			log.Info("Branch ", envName, " not intialized ")
-			log.Info(err)
+			log.Error("-- Branch ", envName, " not intialized. Does it exist?")
+			log.Error(err)
 			continue
+		} else {
+			log.Info("-- Branch ", envName, " is intialized.")
 		}
+
 		ConfMappingOfEnvs[envName] = &environment.Environment{
 			FileSystem: fs,
 			Repository: repo,

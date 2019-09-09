@@ -102,10 +102,11 @@ export GOPATH=$GOPATH:$PWD
 echo $GOPATH
 ```
 
-Install common package:
+Install common package and dependancies :
 
 ```
 go get -u github.com/oleggorj/service-common-lib
+go get -u github.com/spf13/viper
 ```
 
 Install `service-config-data` package:
@@ -120,6 +121,15 @@ Build `service-config-data` service binaries:
 cd ./src/github.com/oleggorj/service-config-data
 make build
 ```
+
+To get service to run on your local machine (make sure docker is running):
+
+```
+cd ./src/github.com/oleggorj/service-config-data
+make run
+```
+
+
 
 ### Deployment of GCP:
 
@@ -173,6 +183,7 @@ Last step to build service binaries, create image, push image to docker repo and
 cd $GOPATH/src/github.com/oleggorj/service-config-data
 make deploy
 ```
+
 
 
 ## Manual step-by-step deployment
