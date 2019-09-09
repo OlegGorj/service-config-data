@@ -92,7 +92,27 @@ The `service-config-data` service designed to provide configuration management c
 
 ## How to deploy Config Service
 
-### Prerequisites:
+### Setup configuration backend Git repo
+
+The very first part of setting up and deploying configuration data service is to setup git-based backend to host actual configurations.
+
+- create Git repository `config-data` (as an example https://github.com/OlegGorj/config-data.git )
+(whether you make it private or public, is entirely up to you)
+- create branch called `sandbox`
+- check into branch `sandbox` file with the name `test.json`
+- edit `test.json` as follows
+
+```
+{
+  "hello": "world"
+}
+```
+
+Note - do not merge the branches!
+
+
+
+### Deployment on local laptop:
 
 Setup GOPATH:
 
@@ -129,6 +149,11 @@ cd ./src/github.com/oleggorj/service-config-data
 make run
 ```
 
+Now, test if the service runs correctly - open new terminal window and run:
+
+```
+ curl http://localhost:8000/api/v2/test/sandbox/hello
+```
 
 
 ### Deployment of GCP:
