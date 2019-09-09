@@ -50,30 +50,34 @@ func init() {
 		panic(fmt.Errorf("Fatal error config file: %s \n", err))
 	}
 
-	serviceAppName = "service-config-data"
+	serviceAppName = viper.GetString("service.name") // "service-config-data"
 	log.SetAppName(serviceAppName)
 	args := os.Args
 	if len(args) == 1 {
 
-		githubRepoName = util.GetENV("REPO")
+		githubRepoName = viper.GetString("service.backend.repo") // util.GetENV("REPO")
 		if githubRepoName == "" {
 			log.Fatal("ERROR: REPO name is required")
 		}
-		githubAccount = util.GetENV("GITACCOUNT")
+		githubAccount = viper.GetString("service.backend.account") // util.GetENV("GITACCOUNT")
 		if githubAccount == "" {
 			log.Warn("warning: GITACCOUNT is required")
 		}
-		githubApiToken = util.GetENV("APITOKEN")
+		githubApiToken = viper.GetString("service.backend.token") // util.GetENV("APITOKEN")
 		if githubApiToken == "" {
 			log.Warn("warning: git APITOKEN is required")
 		}
-		serviceApiVersion = util.GetENV("APIVER")
+		serviceApiVersion = viper.GetString("service.apiver") // util.GetENV("APIVER")
 		if serviceApiVersion == "" {
 			log.Warn("warning: service APIVER is required")
 		}
 
 		// init list of branches
-		confEnvNames = []string{"dev", "sandbox"}
+		//confEnvNames = []string{"dev", "sandbox"}
+		confEnvNames = []string{}
+		err := viper.UnmarshalKey("service.backend.branches", &confEnvNames)
+
+		fmt.Printf("%v, %#v\n", err, confEnvNames)
 
 	} else if args[1] == "dev" {
 
@@ -98,7 +102,7 @@ func init() {
 		log.Fatal("ERROR: Invalid arguments passed")
 	}
 
-	servicePort = util.GetENV("PORT")
+	servicePort = viper.GetString("service.port") // util.GetENV("PORT")
 	if servicePort == "" {
 		servicePort = "8000" // set default part number
 	}
