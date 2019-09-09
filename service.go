@@ -100,9 +100,9 @@ func init() {
 		log.Fatal("ERROR: Invalid arguments passed")
 	}
 
-	servicePort = viper.GetString("service.port") // util.GetENV("PORT")
+	servicePort = viper.GetString("service.port")
 	if servicePort == "" {
-		servicePort = "8000" // set default part number
+		servicePort = "8000"
 	}
 
 	githubBranch = util.GetENV("GITBRANCH") ; if githubBranch == "" { githubBranch = "sandbox" }
@@ -145,15 +145,6 @@ func main() {
 	// 	- https://hackernoon.com/golang-handling-errors-gracefully-8e27f1db729f
 
 }
-
-func ApiHandler(rw http.ResponseWriter, req *http.Request) {
-	_, err := rw.Write([]byte(serviceApiVersion))
-	if err != nil {
-		log.Error("ERROR: Variable <g_api> is not defined properly")
-	}
-	rw.WriteHeader(http.StatusOK)
-}
-
 func initializeEnvironment()  {
 	for _, envName := range confEnvNames {
 
@@ -170,14 +161,23 @@ func initializeEnvironment()  {
 			FileSystem: fs,
 			Repository: repo,
 		}
-
-		// Get the users
-		//arrayUserBytes, err := gitutil.GetFileFromRepo(fs, "users.json")
-		//if err == nil {
-		//	_ = ConfMappingOfEnvs[envName].Users.CreateAllUsers(arrayUserBytes)
-		//}
 	}
 }
+
+
+
+// Depricated
+// Legacy code - needs to be cleaned up
+//
+
+func ApiHandler(rw http.ResponseWriter, req *http.Request) {
+	_, err := rw.Write([]byte(serviceApiVersion))
+	if err != nil {
+		log.Error("ERROR: Variable <g_api> is not defined properly")
+	}
+	rw.WriteHeader(http.StatusOK)
+}
+
 
 //
 func KeyHandler(rw http.ResponseWriter, req *http.Request) {
