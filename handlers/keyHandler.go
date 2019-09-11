@@ -47,30 +47,23 @@ func (u *KeyHandler) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
 	}
 
 	if req.Method == http.MethodGet {
-		// read a key
+		// read config json
 		fs := &environment.FileSystem
 		bytes, err := memfilesystem.ReadFile(*fs, appValue + ".json")
 		if err != nil {
 		    log.Error(err)
 		}
-		//if environment.Keys.Init( bytes ) != nil {
-		//    log.Error(err)
-		//}
-		environment.JsonData = strings.Replace(string(bytes), "\n","",-1)
-		val := gjson.Get(environment.JsonData , keyValue)
 
-		//val, err := environment.Keys.Read(keyValue)
-		//if err != nil {
-		//    log.Error(err)
-		//}
-		//log.Debug("Keys Read:  " + keyValue + ", val:" + val.String()  )
+		// cleanup new lines
+		environment.JsonData = strings.Replace( string(bytes), "\n","",-1 )
+		// get the value for the key (keyValue)
+		val := gjson.Get( environment.JsonData , keyValue )
 
 		var byteData []byte = []byte( val.String() )
 		if  outformat == "json" {
 			rw.Header().Set("Content-Type", "application/json")
+			// don't marshal output if its already json
 			if IsJSON( val.String() ) == false { byteData, err = json.Marshal( val.String()  ) }
-
-			//byteData, err = json.Marshal( val.String()  )
 		}else if outformat == "xml" {
 			rw.Header().Set("Content-Type", "application/xml")
 			byteData, err = xml.Marshal( val.String()  )
