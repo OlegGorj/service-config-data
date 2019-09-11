@@ -41,7 +41,7 @@ push: container
 
 container: build
 		# generate dockerfile from template
-		for t in $(shell find ../service-common-lib/docker/ -type f -name "Dockerfile.goservice.template"); do \
+		for t in $(shell find ./src/github.com/oleggorj/service-common-lib/docker/ -type f -name "Dockerfile.goservice.template"); do \
 					cat $$t | \
 						sed -E "s/{{ .PORT }}/$(PORT)/g" | \
 						sed -E "s/{{ .ServiceName }}/$(APP)/g"; \

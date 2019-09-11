@@ -11,3 +11,5 @@ credentials.json
 tmp*
 
 charts/service-config/values.yaml
+src/github.com/*
+vendor/*
