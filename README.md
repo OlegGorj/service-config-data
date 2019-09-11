@@ -22,8 +22,144 @@ The `service-config-data` service designed to provide configuration management c
 
 ## Directory structure
 
-```
+This is how complete directory structure should look like after installing all repos and resolving dependancies.
 
+```
+├── config-data
+│   ├── README.md
+│   ├── cassandra.json
+│   ├── jhub-whitelist.json
+│   ├── jhub_kernels.json
+│   ├── k8s-cluster.json
+│   ├── service-config-data.json
+│   ├── service-scada-load.json
+│   ├── services.json
+│   └── test.json
+├── pkg
+│   ├── darwin_amd64
+│   │   └── github.com
+│   │       └── tidwall
+│   │           └── gjson.a
+│   └── dep
+│       └── sources
+└── service-config-data
+    ├── JenkinsPod.yaml
+    ├── Jenkinsfile
+    ├── Makefile
+    ├── README.md
+    ├── SECURITY.md
+    ├── charts
+    │   └── service-config
+    │       ├── Chart.yaml
+    │       ├── requirements.yaml
+    │       ├── templates
+    │       │   ├── deployment.yaml
+    │       │   ├── image-pull-secret.yaml
+    │       │   └── service.yaml
+    │       └── values-template.yaml
+    ├── config.json
+    ├── glide.lock
+    ├── glide.yaml
+    ├── service.go
+    ├── skaffold.yaml
+    ├── src
+    │   ├── config-data-util
+    │   │   ├── config_structs.go
+    │   │   ├── data_utility.go
+    │   │   ├── environment
+    │   │   │   └── environment.go
+    │   │   ├── kernel
+    │   │   │   ├── kernel.go
+    │   │   │   └── kernel_test.go
+    │   │   ├── key
+    │   │   │   └── key.go
+    │   │   ├── memfilesystem
+    │   │   │   └── memfilesystem.go
+    │   │   └── user
+    │   │       ├── user.go
+    │   │       └── user_test.go
+    │   ├── github.com
+    │   │   ├── oleggorj
+    │   │   │   └── service-common-lib
+    │   │   │       ├── LICENSE
+    │   │   │       ├── Makefile
+    │   │   │       ├── README.md
+    │   │   │       ├── common
+    │   │   │       │   ├── circuitbreaker
+    │   │   │       │   │   └── circuitbreaker.go
+    │   │   │       │   ├── config
+    │   │   │       │   │   ├── config.go
+    │   │   │       │   │   └── git.go
+    │   │   │       │   ├── logging
+    │   │   │       │   │   └── logging.go
+    │   │   │       │   └── util
+    │   │   │       │       └── util.go
+    │   │   │       ├── docker
+    │   │   │       │   └── Dockerfile.goservice.template
+    │   │   │       └── service
+    │   │   │           ├── router.go
+    │   │   │           ├── routes.go
+    │   │   │           └── webserver.go
+    │   │   ├── subosito
+    │   │   │   └── gotenv
+    │   │   │       ├── CHANGELOG.md
+    │   │   │       ├── LICENSE
+    │   │   │       ├── README.md
+    │   │   │       ├── fixtures
+    │   │   │       │   ├── bom.env
+    │   │   │       │   ├── exported.env
+    │   │   │       │   ├── plain.env
+    │   │   │       │   ├── quoted.env
+    │   │   │       │   └── yaml.env
+    │   │   │       ├── go.mod
+    │   │   │       ├── go.sum
+    │   │   │       ├── gotenv.go
+    │   │   │       └── gotenv_test.go
+    │   │   └── tidwall
+    │   │       ├── gjson
+    │   │       │   ├── LICENSE
+    │   │       │   ├── README.md
+    │   │       │   ├── SYNTAX.md
+    │   │       │   ├── gjson.go
+    │   │       │   ├── gjson_gae.go
+    │   │       │   ├── gjson_ngae.go
+    │   │       │   ├── gjson_test.go
+    │   │       │   ├── go.mod
+    │   │       │   ├── go.sum
+    │   │       │   └── logo.png
+    │   │       ├── match
+    │   │       │   ├── LICENSE
+    │   │       │   ├── README.md
+    │   │       │   ├── match.go
+    │   │       │   └── match_test.go
+    │   │       └── pretty
+    │   │           ├── LICENSE
+    │   │           ├── README.md
+    │   │           ├── pretty.go
+    │   │           └── pretty_test.go
+    │   ├── gitutil
+    │   │   ├── git_utility.go
+    │   │   ├── git_utility_test.go
+    │   │   └── test_data
+    │   │       ├── kernels
+    │   │       │   └── spark-kernel-12CPU-24GB
+    │   │       ├── sandbox_whitelist.json
+    │   │       ├── test_object_storage.json
+    │   │       ├── test_users1.json
+    │   │       ├── test_users2.json
+    │   │       └── user.json
+    │   ├── handlers
+    │   │   ├── confEnvHandler.go
+    │   │   ├── gitHandler.go
+    │   │   ├── kernelHandler.go
+    │   │   ├── keyHandler.go
+    │   │   ├── userHandler.go
+    │   │   └── userHandler_test.go
+    │   └── helpers
+    │       └── helpers.go
+    ├── vars-gcp.mk
+    ├── vars.mk
+    └── watch.sh
 ```
 ---
 
