@@ -1,6 +1,5 @@
 package main
 
-
 import (
 	"encoding/json"
 	"fmt"
@@ -14,14 +13,12 @@ import (
 	"github.com/oleggorj/service-config-data/gitutil"
 
 	"github.com/spf13/viper"
-
 	"github.com/gorilla/mux"
 	"io/ioutil"
 	"net/http"
 	"os"
 	"strings"
 )
-
 
 var (
 	githubRepoName    string
@@ -123,7 +120,6 @@ func main() {
 	service.RegisterHandlerFunction("/api/v1/{app}/{env}/{key}", "GET", KeyHandler)
 	service.RegisterHandlerFunction("/api/v1/{app}/{env}/{key}/{debug}", "GET", KeyHandler)
 
-
 	// v2 handlers
 	service.RegisterHandler("/api/v2/configs/{environment}/users", "GET", &handlers.UsersHandler{Environments: ConfMappingOfEnvs})
 	service.RegisterHandler("/api/v2/configs/{environment}/users/{email}", "GET", &handlers.UserHandler{Environments: ConfMappingOfEnvs})
@@ -135,16 +131,14 @@ func main() {
 	service.RegisterHandler("/api/v2/{app}/{env}/{key}/debug", "GET", &handlers.KeyHandler{Environments: ConfMappingOfEnvs})
 
 	service.StartServer(servicePort)
-
 	// TODO: Have to think how we want to log failures so that we can debug.
 	//	 - If a pod dies in kubernetes the logs for it won't be available
 	//	 - Need to write logs to some file and persist it probably
 	//
-
 	// TODO: Have better way to log and handle errors to avoid excessive prints
 	// 	- https://hackernoon.com/golang-handling-errors-gracefully-8e27f1db729f
-
 }
+
 func initializeEnvironment()  {
 	for _, envName := range confEnvNames {
 

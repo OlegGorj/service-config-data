@@ -5,25 +5,34 @@ import (
 	"github.com/gorilla/mux"
 	"net/http"
 	"strings"
+	"encoding/json"
+	"encoding/xml"
+	"github.com/tidwall/gjson"
+
 	log "github.com/oleggorj/service-common-lib/common/logging"
 	conf "github.com/oleggorj/service-config-data/config-data-util"
-
 	"github.com/oleggorj/service-config-data/config-data-util/memfilesystem"
-	_ "github.com/oleggorj/service-config-data/config-data-util/key"
 )
 
 type KeyHandler struct {
 	Environments conf.MappingToEnv
 }
 
-func (u *KeyHandler) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
+// move this to utilis
+func IsJSON(str string) bool {
+    var js json.RawMessage
+    return json.Unmarshal([]byte(str), &js) == nil
+}
 
+func (u *KeyHandler) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
+	outformat := "plain"
+	v := req.URL.Query()
+	outformat =  v.Get("out")
 	//serviceDebugFlag := false
-	rw.Header().Set("Content-Type", "application/json")
 
 	appValue := strings.ToLower(mux.Vars(req)["app"])
 	envValue := strings.ToLower(mux.Vars(req)["env"])
-	keyValue := mux.Vars(req)["key"]
+	keyValue := strings.Replace( mux.Vars(req)["key"] , "@","#",-1) // mux.Vars(req)["key"]
 	if appValue == "" || envValue == "" || keyValue == "" {
 		log.Error("ERROR: <app>, <env> or <key> can not be empty.\n")
 		rw.WriteHeader(http.StatusNotAcceptable)
@@ -44,16 +53,34 @@ func (u *KeyHandler) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
 		if err != nil {
 		    log.Error(err)
 		}
-		if environment.Keys.Init( bytes ) != nil {
-		    log.Error(err)
+		//if environment.Keys.Init( bytes ) != nil {
+		//    log.Error(err)
+		//}
+		environment.JsonData = strings.Replace(string(bytes), "\n","",-1)
+		val := gjson.Get(environment.JsonData , keyValue)
+
+		//val, err := environment.Keys.Read(keyValue)
+		//if err != nil {
+		//    log.Error(err)
+		//}
+		//log.Debug("Keys Read:  " + keyValue + ", val:" + val.String()  )
+
+		var byteData []byte = []byte( val.String() )
+		if  outformat == "json" {
+			rw.Header().Set("Content-Type", "application/json")
+			if IsJSON( val.String() ) == false { byteData, err = json.Marshal( val.String()  ) }
+
+			//byteData, err = json.Marshal( val.String()  )
+		}else if outformat == "xml" {
+			rw.Header().Set("Content-Type", "application/xml")
+			byteData, err = xml.Marshal( val.String()  )
+		}else{
+			rw.Header().Set("Content-Type", "application/text")
 		}
-		val, err := environment.Keys.Read(keyValue)
-		if err != nil {
-		    log.Error(err)
-		}
-		//fmt.Println("Keys Read:  " + keyValue + ", val:" + val )
-		rw.Write([]byte(val))
+
 		rw.WriteHeader(http.StatusOK)
+		rw.Write( byteData )
+
 	}
 
 }
