@@ -29,6 +29,8 @@ func (keys *Keys) Init(jsonBuffer []byte) ( error){
 			k.Key = j_key
 			k.Val = fmt.Sprintf("%s", j_value )
 			(*keys) = append( (*keys), k)
+
+			fmt.Println("Pair: key - ", j_key, ", val - ", j_value)
   }
 	return nil
 }
