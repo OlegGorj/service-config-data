@@ -184,7 +184,6 @@ The very first part of setting up and deploying configuration data service is to
 Note - do not merge the branches!
 
 
-
 ### Deployment on local laptop:
 
 Install common package and dependancies :
@@ -231,6 +230,7 @@ Service API allows optional parameter specifying the output format. For instance
 ```
  curl http://localhost:8000/api/v2/test/sandbox/hello?out=json
 ```
+
 
 
 
@@ -287,7 +287,115 @@ cd $GOPATH/src/github.com/oleggorj/service-config-data
 make deploy
 ```
 
+---
+## How to use config service
 
+
+### 1. `config-data` repository
+
+Consider an example of configuration file `config-data/k8s-cluster.json` in branch `sandbox`, that looks like this
+
+```
+{
+  "name" : "jx-sandbox",
+  "k8s-name" : "k8s-sandbox",
+  "apps": [
+    {
+      "name" : "jenkins",
+      "app-type" : "devops"
+    },
+    {
+      "name" : "grafana",
+      "app-type" : "devops"
+    },
+    {
+      "name" : "cassandra",
+      "app-type" : "storage"
+    }
+  ],
+  "env" : "sandbox",
+  "region" : "us-east",
+  "git-org" : "",
+  "kubectl-ver" : "v1.13.0",
+  "helm-ver": "v2.1.3",
+  "docker-ver" : "1.12.6",
+  "cloud-provider":{
+    "name": "ibmcloud",
+    "api-endpoint" : "https://api.us-east.bluemix.net"
+  }
+}
+```
+
+Assuming running config service container locally (http://localhost:8000)
+
+
+### 2. A few use cases of `service-config-data` service
+
+Hope these examples are self explanatory.
+
+```
+$ curl http://localhost:8000/api/v2/k8s-cluster/sandbox/region
+
+us-east
+```
+
+```
+$ curl http://localhost:8000/api/v2/k8s-cluster/sandbox/apps
+
+[
+  {
+    "name" : "jenkins",
+    "app-type" : "devops"
+  },
+  {
+    "name" : "grafana",
+    "app-type" : "devops"
+  },
+  {
+    "name" : "cassandra",
+    "app-type" : "storage"
+  }
+]
+```
+
+```
+$ curl http://localhost:8000/api/v2/k8s-cluster/sandbox/apps.@
+
+3
+```
+
+```
+$ curl http://localhost:8000/api/v2/k8s-cluster/sandbox/apps.2
+
+{      "name" : "cassandra",      "app-type" : "storage"    }
+```
+
+```
+$ curl http://localhost:8000/api/v2/k8s-cluster/sandbox/apps.@.name
+
+["jenkins","grafana","cassandra"]
+```
+
+```
+$ curl http://localhost:8000/api/v2/k8s-cluster/sandbox/apps.1.name
+
+["grafana"]
+```
+
+```
+$ curl http://localhost:8000/api/v2/k8s-cluster/sandbox/apps.@(name=="cassandra").app-type
+
+storage
+```
+
+```
+$ curl http://localhost:8000/api/v2/k8s-cluster/sandbox/apps.@(app-type=="devops")@.name
+
+["jenkins","grafana"]
+```
+
+
+---
 
 ## Manual step-by-step deployment
 
@@ -315,49 +423,6 @@ make deploy
 make deployclean
 ```
 
----
-## How to use it.
-
-
-### 1. `config-data` repository
-
-Configuration file for Services `config-data/service-config-data.json`, branch `sandbox`, looks like
-
-```
-{
-  "app" : "service-config-data",
-  "app-type" : "backend",
-  "env" : "sandbox"
-}
-```
-
-### 2. Call `service-config-data` service
-
-Set environment SHELL variables:
-
-```
-export ENVIRONMENT=sandbox
-export APP=services
-export KEY=app-type
-```
-
-Call the service:
-
-```
-curl http://<IP of service-config-data service>:8000/api/v1/$APP/$ENVIRONMENT/$KEY
-```
-
-Example of calling the Config service from *inside* the k8s cluster:
-
-```
- curl http://service-config-data.default:8000/api/v1/test/sandbox/hello
-```
-You should get back:
-
-```
-world
-```
----
 
 # Deploy service on K8s cluster using Helm chart
 
