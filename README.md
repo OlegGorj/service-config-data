@@ -127,6 +127,7 @@ Install common package and dependancies :
 ```
 go get -u github.com/oleggorj/service-common-lib
 go get -u github.com/spf13/viper
+go get -u github.com/tidwall/gjson
 ```
 
 Install `service-config-data` package:
@@ -154,6 +155,13 @@ Now, test if the service runs correctly - open new terminal window and run:
 ```
  curl http://localhost:8000/api/v2/test/sandbox/hello
 ```
+
+Service API allows optional parameter specifying the output format. For instance, to get config data in JSON format, run:
+
+```
+ curl http://localhost:8000/api/v2/test/sandbox/hello?out=json
+```
+
 
 
 ### Deployment of GCP:
@@ -272,12 +280,12 @@ curl http://<IP of service-config-data service>:8000/api/v1/$APP/$ENVIRONMENT/$K
 Example of calling the Config service from *inside* the k8s cluster:
 
 ```
- curl http://service-config-data.default:8000/api/v1/services/sandbox/app
+ curl http://service-config-data.default:8000/api/v1/test/sandbox/hello
 ```
 You should get back:
 
 ```
-service-config-data
+world
 ```
 ---
 
@@ -301,16 +309,5 @@ Clean up:
 helm del --purge config-service
 ```
 
-
----
-### Note for DevOps
-
-*This section needs updates*
-
-_Note:_ internal IPs
-
-Jenkins build job for [Master branch](http://10.0.0.11:8080/job/service-config_master/)
-
-Jenkins build job for [Pull requests](http://10.0.0.11:8080/job/service-config_pr/)
 
 ---
