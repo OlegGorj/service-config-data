@@ -6,15 +6,12 @@ import (
 	"fmt"
 	"github.com/gorilla/mux"
 	log "github.com/oleggorj/service-common-lib/common/logging"
-	conf "github.com/oleggorj/service-config-data/config-data-util"
-	"github.com/oleggorj/service-config-data/config-data-util/user"
-	"github.com/oleggorj/service-config-data/gitutil"
-
+	conf "config-data-util"
+	"config-data-util/user"
+	"config-data-util/memfilesystem"
+	"gitutil"
 	"net/http"
 	"strings"
-
-	"github.com/oleggorj/service-config-data/config-data-util/memfilesystem"
-
 )
 
 type UsersHandler struct {

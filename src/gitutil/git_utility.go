@@ -3,7 +3,7 @@ package gitutil
 
 import (
 	"fmt"
-	"github.com/oleggorj/service-config-data/config-data-util/memfilesystem"
+	"config-data-util/memfilesystem"
 	log "github.com/oleggorj/service-common-lib/common/logging"
 
 	"gopkg.in/src-d/go-billy.v4"

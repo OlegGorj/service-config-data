@@ -3,7 +3,7 @@
 package config_data_util
 
 import (
-	"github.com/oleggorj/service-config-data/config-data-util/environment"
+	"config-data-util/environment"
 )
 
 // An Environment represents the configuration of a particular environment this can be one of

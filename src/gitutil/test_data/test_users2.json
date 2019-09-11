@@ -1,0 +1,22 @@
+[{
+  "email": "abdullah@ibm.com",
+  "metadata": {
+    "is_admin": false,
+    "list_of_team_bucket_mapping": []
+  }
+},
+  {
+    "email": "johnny@ibm.com",
+    "metadata": {
+      "is_admin": true,
+      "list_of_team_bucket_mapping": []
+    }
+  },
+  {
+    "email": "oleg@ibm.com",
+    "metadata": {
+      "is_admin": true,
+      "list_of_team_bucket_mapping": []
+    }
+  }
+]

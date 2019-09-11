@@ -1,0 +1,14 @@
+{
+  "email": "newUser@ibm.com",
+  "metadata": {
+    "is_admin": false,
+    "list_of_team_bucket_mapping": [
+      {
+        "bucket_name": "sample_bucket_2",
+        "team_name": "fun_team_2",
+        "cos_instance": "client2_instance"
+      }
+    ],
+    "user_bucket": "abdullas_bucket"
+  }
+}

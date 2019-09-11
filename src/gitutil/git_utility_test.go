@@ -3,8 +3,8 @@ package gitutil
 import (
 	"encoding/json"
 	"fmt"
-	conf "github.com/oleggorj/service-config-data/config-data-util"
-	userutil "github.com/oleggorj/service-config-data/config-data-util/user"
+	conf "config-data-util"
+	userutil "config-data-util/user"
 	"gopkg.in/src-d/go-billy.v4"
 	"gopkg.in/src-d/go-git.v4"
 	"io/ioutil"

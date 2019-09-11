@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	_ "gopkg.in/src-d/go-billy.v4"
-	_ "github.com/oleggorj/service-config-data/config-data-util/memfilesystem"
+	_ "config-data-util/memfilesystem"
 	log "github.com/oleggorj/service-common-lib/common/logging"
 )
 

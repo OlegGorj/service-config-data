@@ -1,0 +1,12 @@
+{
+  "display_name": "PySpark (py3.6/spark2.2.3-0.2/12cpu/24GB)",
+  "language": "python",
+  "argv": [ "/opt/conda/bin/python", "-m", "ipykernel", "-f", "{connection_file}" ],
+  "env": {
+    "SPARK_HOME": "/usr/local/spark",
+    "PYSPARK_PYTHON": "/opt/conda/bin/python",
+    "PYTHONPATH": "/usr/local/spark/python/:/usr/local/spark/python/lib/py4j-0.10.7-src.zip:/home/jovyan/.local/lib/python3.6/site-packages",
+    "PYTHONSTARTUP": "/usr/local/spark/python/pyspark/shell.py",
+    "PYSPARK_SUBMIT_ARGS": "--master spark://spark-master.spark:7077 pyspark-shell"
+  }
+}

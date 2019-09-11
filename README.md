@@ -23,70 +23,7 @@ The `service-config-data` service designed to provide configuration management c
 ## Directory structure
 
 ```
-── service-config-data
-    ├── JenkinsPod.yaml
-    ├── Jenkinsfile
-    ├── Makefile
-    ├── OWNERS
-    ├── OWNERS_ALIASES
-    ├── README.md
-    ├── charts
-    │   ├── preview
-    │   │   ├── Chart.yaml
-    │   │   ├── Makefile
-    │   │   ├── requirements.yaml
-    │   │   └── values.yaml
-    │   └── service-config
-    │       ├── Chart.yaml
-    │       ├── requirements.yaml
-    │       ├── templates
-    │       │   ├── deployment.yaml
-    │       │   ├── image-pull-secret.yaml
-    │       │   └── service.yaml
-    │       └── values-template.yaml
-    ├── config-data-util
-    │   ├── config_structs.go
-    │   ├── data_utility.go
-    │   ├── environment
-    │   │   └── environment.go
-    │   ├── kernel
-    │   │   ├── kernel.go
-    │   │   └── kernel_test.go
-    │   ├── memfilesystem
-    │   │   └── memfilesystem.go
-    │   └── user
-    │       ├── user.go
-    │       └── user_test.go
-    ├── gitutil
-    │   ├── git_utility.go
-    │   ├── git_utility_test.go
-    │   └── test_data
-    │       ├── kernels
-    │       │   └── spark-kernel-12CPU-24GB
-    │       ├── sandbox_whitelist.json
-    │       ├── test_object_storage.json
-    │       ├── test_users1.json
-    │       ├── test_users2.json
-    │       └── user.json
-    ├── glide.yaml
-    ├── handlers
-    │   ├── confEnvHandler.go
-    │   ├── gitHandler.go
-    │   ├── kernelHandler.go
-    │   ├── userHandler.go
-    │   └── userHandler_test.go
-    ├── helpers
-    │   └── helpers.go
-    ├── service-common-lib
-    │   └── common
-    │       └── config
-    │           └── config.go
-    ├── service-config-data
-    ├── service.go
-    ├── skaffold.yaml
-    ├── vars-gcp.mk
-    ├── vars.mk
-    └── watch.sh
+
 ```
 ---
 
@@ -114,6 +51,13 @@ Note - do not merge the branches!
 
 ### Deployment on local laptop:
 
+Install common package and dependancies :
+
+```
+git clone https://github.com/OlegGorj/service-config-data.git
+cd service-config-data
+```
+
 Setup GOPATH:
 
 ```
@@ -122,7 +66,7 @@ export GOPATH=$GOPATH:$PWD
 echo $GOPATH
 ```
 
-Install common package and dependancies :
+Make sure all dependancies are installed
 
 ```
 go get -u github.com/oleggorj/service-common-lib
@@ -130,23 +74,15 @@ go get -u github.com/spf13/viper
 go get -u github.com/tidwall/gjson
 ```
 
-Install `service-config-data` package:
-
-```
-go get -u github.com/oleggorj/service-config-data
-```
-
 Build `service-config-data` service binaries:
 
 ```
-cd ./src/github.com/oleggorj/service-config-data
 make build
 ```
 
 To get service to run on your local machine (make sure docker is running):
 
 ```
-cd ./src/github.com/oleggorj/service-config-data
 make run
 ```
 

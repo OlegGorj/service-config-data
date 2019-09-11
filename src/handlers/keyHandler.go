@@ -10,8 +10,8 @@ import (
 	"github.com/tidwall/gjson"
 
 	log "github.com/oleggorj/service-common-lib/common/logging"
-	conf "github.com/oleggorj/service-config-data/config-data-util"
-	"github.com/oleggorj/service-config-data/config-data-util/memfilesystem"
+	conf "config-data-util"
+	"config-data-util/memfilesystem"
 )
 
 type KeyHandler struct {
@@ -23,13 +23,15 @@ func IsJSON(str string) bool {
     var js json.RawMessage
     return json.Unmarshal([]byte(str), &js) == nil
 }
+func IsXML(data []byte) bool {
+    return xml.Unmarshal(data, new(interface{})) != nil
+}
 
 func (u *KeyHandler) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
 	outformat := "plain"
 	v := req.URL.Query()
 	outformat =  v.Get("out")
 	//serviceDebugFlag := false
-
 	appValue := strings.ToLower(mux.Vars(req)["app"])
 	envValue := strings.ToLower(mux.Vars(req)["env"])
 	keyValue := strings.Replace( mux.Vars(req)["key"] , "@","#",-1) // mux.Vars(req)["key"]
