@@ -69,9 +69,7 @@ echo $GOPATH
 Make sure all dependancies are installed
 
 ```
-go get -u github.com/oleggorj/service-common-lib
-go get -u github.com/spf13/viper
-go get -u github.com/tidwall/gjson
+make deps
 ```
 
 Build `service-config-data` service binaries:
