@@ -1,5 +1,26 @@
-package: service-config-data
+package: github.com/oleggorj/service-config-data
 import:
 - package: github.com/gorilla/mux
-  version: ^1.6.2
+- package: github.com/oleggorj/service-common-lib
+  import:
+    repo: git@github.com/oleggorj/service-common-lib.git
+  subpackages:
+  - common/config
+  - common/logging
+  - common/util
+  - service
+- package: github.com/spf13/viper
+- package: github.com/tidwall/gjson
+- package: gopkg.in/src-d/go-billy.v4
+  subpackages:
+  - memfs
 - package: gopkg.in/src-d/go-git.v4
+  subpackages:
+  - plumbing
+  - plumbing/object
+  - storage/memory
+testImport:
+- package: gotest.tools
+  subpackages:
+  - assert
+  - assert/cmp

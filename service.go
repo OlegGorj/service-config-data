@@ -7,10 +7,10 @@ import (
 	log "github.com/oleggorj/service-common-lib/common/logging"
 	"github.com/oleggorj/service-common-lib/common/util"
 	"github.com/oleggorj/service-common-lib/service"
-	"github.com/oleggorj/service-config-data/config-data-util/environment"
-	"github.com/oleggorj/service-config-data/handlers"
-	conf "github.com/oleggorj/service-config-data/config-data-util"
-	"github.com/oleggorj/service-config-data/gitutil"
+	"config-data-util/environment"
+	"handlers"
+	conf "config-data-util"
+	"gitutil"
 
 	"github.com/spf13/viper"
 	"github.com/gorilla/mux"
@@ -131,9 +131,7 @@ func main() {
 	service.RegisterHandler("/api/v2/{app}/{env}/{key}/debug", "GET", &handlers.KeyHandler{Environments: ConfMappingOfEnvs})
 
 	service.StartServer(servicePort)
-	// TODO: Have to think how we want to log failures so that we can debug.
-	//	 - If a pod dies in kubernetes the logs for it won't be available
-	//	 - Need to write logs to some file and persist it probably
+	// TODO: Need to add side-cart container to stream the logs out
 	//
 	// TODO: Have better way to log and handle errors to avoid excessive prints
 	// 	- https://hackernoon.com/golang-handling-errors-gracefully-8e27f1db729f

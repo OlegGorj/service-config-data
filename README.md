@@ -399,32 +399,32 @@ $ curl http://localhost:8000/api/v2/k8s-cluster/sandbox/apps.@(app-type=="devops
 
 ## Manual step-by-step deployment
 
-### 0. Build service runtime from Go code
+### Build service runtime from Go code
 
 ```
 make build
 ```
 
-### 1. Build image and push to registry
+### Build image and push to registry
 
 ```
 make push
 ```
 
-### 2. Deploy service
+### Deploy service
 
 ```
 make deploy
 ```
 
-### 3. Clean up
+### Clean up
 
 ```
 make deployclean
 ```
 
 
-# Deploy service on K8s cluster using Helm chart
+# Deploy service on Kubernetes cluster using Helm chart
 
 Make sure values file `./service-config/values.yaml` is populated based on template `../service-common-lib/docker/values-template.yaml`
 
@@ -437,8 +437,7 @@ cd service-config-data/charts
 helm upgrade --install config-service --values ./service-config/values.yaml --namespace default  ./service-config/
 ```
 
-
-Clean up:
+...and clean up:
 
 ```
 helm del --purge config-service
