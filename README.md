@@ -186,7 +186,7 @@ Note - do not merge the branches!
 
 ### Deployment on local laptop:
 
-Install common package and dependancies :
+Install main package and dependancies :
 
 ```
 git clone https://github.com/OlegGorj/service-config-data.git
