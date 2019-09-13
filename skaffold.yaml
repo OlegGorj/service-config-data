@@ -7,7 +7,7 @@ build:
     docker: {}
   tagPolicy:
     envTemplate:
-      template: '{{.DOCKER_REGISTRY}}/advancedanalyticscanada/service-config-data:{{.VERSION}}'
+      template: '{{.DOCKER_REGISTRY}}/oleggorj/service-config-data:{{.VERSION}}'
   local: {}
 deploy:
   kubectl: {}
@@ -18,7 +18,7 @@ profiles:
     - docker: {}
     tagPolicy:
       envTemplate:
-        template: '{{.DOCKER_REGISTRY}}/advancedanalyticscanada/service-config-data:{{.DIGEST_HEX}}'
+        template: '{{.DOCKER_REGISTRY}}/oleggorj/service-config-data:{{.DIGEST_HEX}}'
     local: {}
   deploy:
     helm:
@@ -26,5 +26,5 @@ profiles:
       - name: service-config-data
         chartPath: charts/service-config-data
         setValueTemplates:
-          image.repository: '{{.DOCKER_REGISTRY}}/advancedanalyticscanada/service-config-data'
+          image.repository: '{{.DOCKER_REGISTRY}}/oleggorj/service-config-data'
           image.tag: '{{.DIGEST_HEX}}'
