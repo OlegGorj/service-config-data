@@ -183,7 +183,6 @@ The very first part of setting up and deploying configuration data service is to
 
 Note - do not merge the branches!
 
-
 ### Deployment on local laptop:
 
 Install main package and dependancies :
