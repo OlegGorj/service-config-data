@@ -29,18 +29,6 @@ spec:
             cpu: {{ .Values.resources.requests.cpu }}
             memory: {{ .Values.resources.requests.memory }}
         env:
-        - name: GITACCOUNT
-          value: {{ .Values.service.GITACCOUNT }}
-        - name: APITOKEN
-          value: {{ .Values.service.APITOKEN }}
-        - name: CONFIGFILE
-          value: {{ .Values.service.CONFIGFILE }}
-        - name: APP
-          value: {{ .Values.service.name }}
-        - name: RELEASE
-          value: "{{ .Values.service.Release }}"
-        - name: REPO
-          value: {{ .Values.service.GITREPO }}
         - name: APIVER
           value: {{ .Values.service.APIVER }}
 

@@ -13,10 +13,10 @@ metadata:
 spec:
   selector:
     app: {{ .Values.service.name }}
-  clusterIP: None
+#  clusterIP: None
   type: {{ .Values.service.type }}
   ports:
   - protocol: TCP
-    nodePort: {{ .Values.service.nodePort }}
+#    nodePort: {{ .Values.service.nodePort }}
     targetPort: {{ .Values.service.externalPort }}
     port: {{ .Values.service.containerPort }}

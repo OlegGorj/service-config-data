@@ -121,6 +121,7 @@ func main() {
 	service.RegisterHandlerFunction("/api/v1/{app}/{env}/{key}/{debug}", "GET", KeyHandler)
 
 	// v2 handlers
+	service.RegisterHandlerFunction("/api/v2/reload", "GET", ApiHandlerReload)
 	service.RegisterHandler("/api/v2/configs/{environment}/users", "GET", &handlers.UsersHandler{Environments: ConfMappingOfEnvs})
 	service.RegisterHandler("/api/v2/configs/{environment}/users/{email}", "GET", &handlers.UserHandler{Environments: ConfMappingOfEnvs})
 	service.RegisterHandler("/api/v2/configs/{environment}/users/{email}", "DELETE", &handlers.UserHandler{Environments: ConfMappingOfEnvs})
@@ -156,6 +157,16 @@ func initializeEnvironment()  {
 	}
 }
 
+func ApiHandlerReload(rw http.ResponseWriter, req *http.Request) {
+
+	initializeEnvironment()
+
+	_, err := rw.Write([]byte(serviceApiVersion))
+	if err != nil {
+		log.Error("ERROR: Variable <g_api> is not defined properly")
+	}
+	rw.WriteHeader(http.StatusOK)
+}
 
 
 // Depricated
