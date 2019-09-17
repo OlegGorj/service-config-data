@@ -6,13 +6,13 @@ GOARCH?=amd64
 include vars-gcp.mk
 
 APP?=service-config-data
-APIVER?="v2"
-
+APIVER?=v2
 RELEASE?=1.3
 IMAGE?=${REGISTRY}/${APP}:${RELEASE}
+DOCKER_ORG?=oleggorj
 
 PORT?=8000
-NODE_PORT?=30083
+LB_EXTERNAL_PORT?=8000
 
 ENV?=SANDBOX
 
@@ -59,10 +59,16 @@ deploy:
 		echo ""
 		for t in $(shell find ./charts/${K8S_CHART} -type f -name "values-template.yaml"); do \
 					cat $$t | \
-						sed -E "s/{{ .ServiceName }}/$(APP)/g"; \
+						sed -E "s/{{ .ServiceName }}/$(APP)/g" | \
+						sed -E "s/{{ .Release }}/$(RELEASE)/g" | \
+						sed -E "s/{{ .Env }}/$(ENV)/g" | \
+						sed -E "s/{{ .Kube_namespace }}/$(K8S_NAMESPACE)/g" | \
+						sed -E "s/{{ .ApiVer }}/$(APIVER)/g" | \
+						sed -E "s/{{ .LBPort }}/$(LB_EXTERNAL_PORT)/g" | \
+						sed -E "s/{{ .ContainerPort }}/$(PORT)/g" | \
+						sed -E "s/{{ .DockerOrg }}/$(DOCKER_ORG)/g"; \
 		done > ./charts/${K8S_CHART}/values.yaml
-		cd charts
-		helm install --name ${K8S_CHART} --install ${K8S_CHART} --values ./charts/${K8S_CHART}/values.yaml --namespace ${K8S_NAMESPACE}  ./charts/${K8S_CHART}/
+		helm install --name ${K8S_CHART} --values ./charts/${K8S_CHART}/values.yaml --namespace ${K8S_NAMESPACE}  ./charts/${K8S_CHART}/
 		rm ./charts/${K8S_CHART}/values.yaml
 
 .PHONY: glide

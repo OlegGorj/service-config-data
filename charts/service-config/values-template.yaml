@@ -13,8 +13,8 @@ secretsibmcloud:
 service:
   name: {{ .ServiceName }}
   type: LoadBalancer
-  externalPort: 8000
-  containerPort: 8000
+  externalPort: {{ .LBPort }}
+  containerPort: {{ .ContainerPort }}
   nodePort: 31070
   replicaCount: 1
 
@@ -23,14 +23,14 @@ service:
   GITREPO: "github.com/OlegGorJ/config-data.git"
 
   CONFIGFILE: services
-  Release: "1.0"
-  Environment: sandbox
-  K8s_namespace: default
-  APIVER: v1
+  Release: "{{ .Release }}"
+  Environment: "{{ .Env }}"
+  K8s_namespace: "{{ .Kube_namespace }}"
+  APIVER: "{{ .ApiVer }}"
   #NodeSelector: services
 
 image:
-  repository: "oleggorj/service-config-data:1.0"
+  repository: "{{ .DockerOrg }}/{{ .ServiceName }}:{{ .Release }}"
   pullPolicy: Always
 
 resources:
