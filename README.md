@@ -282,8 +282,34 @@ helm init --service-account tiller --upgrade
 Last step to build service binaries, create image, push image to docker repo and deploy Helm chart:
 
 ```
-cd $GOPATH/src/github.com/oleggorj/service-config-data
+cd service-config-data
+make push
 make deploy
+```
+
+Once, above steps are done, run following command to list all k8s services deployed in `default` namespace:
+
+```
+$ kubectl get services
+NAME                  TYPE           CLUSTER-IP   EXTERNAL-IP      PORT(S)          AGE
+kubernetes            ClusterIP      10.12.0.1    <none>           443/TCP          4d16h
+service-config-data   LoadBalancer   10.12.14.8   xxx.xxx.xxx.xx   8000:30956/TCP   10h
+```
+
+You should see public IP for service `service-config-data` - `xxx.xxx.xxx.xx`.
+
+And, finally, to test service deployment, run quick test curl call:
+
+```
+$ curl http://xxx.xxx.xxx.xx/api/v2/test/sandbox/hello
+
+world
+```
+
+Clean up:
+
+```
+make deployclean
 ```
 
 ---
