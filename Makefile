@@ -51,7 +51,7 @@ container: build
 		rm -f ${APP}
 
 deployclean:
-		-helm del --purge ${K8S_CHART}
+		helm del --purge ${K8S_CHART}
 
 deploy:
 		echo ""
@@ -68,8 +68,9 @@ deploy:
 						sed -E "s/{{ .ContainerPort }}/$(PORT)/g" | \
 						sed -E "s/{{ .DockerOrg }}/$(DOCKER_ORG)/g"; \
 		done > ./charts/${K8S_CHART}/values.yaml
-		helm install --name ${K8S_CHART} --values ./charts/${K8S_CHART}/values.yaml --namespace ${K8S_NAMESPACE}  ./charts/${K8S_CHART}/
-		rm ./charts/${K8S_CHART}/values.yaml
+		-helm install --name ${K8S_CHART} --values ./charts/${K8S_CHART}/values.yaml --namespace ${K8S_NAMESPACE}  ./charts/${K8S_CHART}/
+		-rm ./charts/${K8S_CHART}/values.yaml
+		kubectl get services --all-namespaces | grep ${APP}
 
 .PHONY: glide
 glide:
