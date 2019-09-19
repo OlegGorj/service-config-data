@@ -174,7 +174,7 @@ func ApiHandlerWebhooksV2(w http.ResponseWriter, r *http.Request) {
 
 	log.Debug("ApiHandlerWebhooksV2 called")
 
-	payload, err := github.ValidatePayload(r, []byte("1234567890"))
+	payload, err := github.ValidatePayload(r, []byte("my-secret-apikey"))
 	if err != nil {
 		log.Error("error reading request body: err=%s\n", err)
 		return
