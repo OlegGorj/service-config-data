@@ -141,7 +141,7 @@ func main() {
 	// TODO add endpoints for configmaps
 
 	// endpoint for webhooks
-	service.RegisterHandlerFunction( webhooks_path, "POST", ApiHandlerWebhooksV2 )
+	service.RegisterHandlerFunction( viper.GetString("service.backend.webhook_path") /* webhooks_path */, "POST", ApiHandlerWebhooksV2 )
 
 	service.StartServer(servicePort)
 
@@ -214,7 +214,6 @@ func ApiHandlerWebhooksV2(w http.ResponseWriter, r *http.Request) {
 // --- Depricated ---
 // Legacy code - needs to be cleaned up
 //
-
 func ApiHandler(rw http.ResponseWriter, req *http.Request) {
 	_, err := rw.Write([]byte(serviceApiVersion))
 	if err != nil {
