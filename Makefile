@@ -53,7 +53,7 @@ container: build
 deployclean:
 		helm del --purge ${K8S_CHART}
 
-deploy: deployclean push
+deploy:
 		for t in $(shell find ./charts/${K8S_CHART} -type f -name "values-template.yaml"); do \
 					cat $$t | \
 						sed -E "s/{{ .ServiceName }}/$(APP)/g" | \
