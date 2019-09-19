@@ -53,10 +53,7 @@ container: build
 deployclean:
 		helm del --purge ${K8S_CHART}
 
-deploy:
-		echo ""
-		echo "*** did you run 'make push'? ***"
-		echo ""
+deploy: deployclean push
 		for t in $(shell find ./charts/${K8S_CHART} -type f -name "values-template.yaml"); do \
 					cat $$t | \
 						sed -E "s/{{ .ServiceName }}/$(APP)/g" | \
@@ -72,6 +69,7 @@ deploy:
 		-rm ./charts/${K8S_CHART}/values.yaml
 		kubectl get services --all-namespaces | grep ${APP}
 
+
 .PHONY: glide
 glide:
 ifeq ($(shell command -v glide 2> /dev/null),)
@@ -81,3 +79,23 @@ endif
 .PHONY: deps
 deps: glide
 		glide install
+
+
+deploy-upgrade:
+				echo ""
+				echo "*** did you run 'make push'? ***"
+				echo ""
+				for t in $(shell find ./charts/${K8S_CHART} -type f -name "values-template.yaml"); do \
+							cat $$t | \
+								sed -E "s/{{ .ServiceName }}/$(APP)/g" | \
+								sed -E "s/{{ .Release }}/$(RELEASE)/g" | \
+								sed -E "s/{{ .Env }}/$(ENV)/g" | \
+								sed -E "s/{{ .Kube_namespace }}/$(K8S_NAMESPACE)/g" | \
+								sed -E "s/{{ .ApiVer }}/$(APIVER)/g" | \
+								sed -E "s/{{ .LBPort }}/$(LB_EXTERNAL_PORT)/g" | \
+								sed -E "s/{{ .ContainerPort }}/$(PORT)/g" | \
+								sed -E "s/{{ .DockerOrg }}/$(DOCKER_ORG)/g"; \
+				done > ./charts/${K8S_CHART}/values.yaml
+				-helm upgrade  ${K8S_CHART} --values ./charts/${K8S_CHART}/values.yaml --namespace ${K8S_NAMESPACE}  ./charts/${K8S_CHART}/
+				-rm ./charts/${K8S_CHART}/values.yaml
+				kubectl get services --all-namespaces | grep ${APP}

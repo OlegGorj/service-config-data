@@ -18,6 +18,8 @@ import (
 	"net/http"
 	"os"
 	"strings"
+
+	"github.com/google/go-github/github"
 )
 
 var (
@@ -37,6 +39,9 @@ var (
 	confEnvNames       []string
 	)
 
+const (
+		webhooks_path = "/webhooks"
+)
 
 func init() {
 
@@ -122,16 +127,24 @@ func main() {
 
 	// v2 handlers
 	service.RegisterHandlerFunction("/api/v2/reload", "GET", ApiHandlerReload)
+
 	service.RegisterHandler("/api/v2/configs/{environment}/users", "GET", &handlers.UsersHandler{Environments: ConfMappingOfEnvs})
 	service.RegisterHandler("/api/v2/configs/{environment}/users/{email}", "GET", &handlers.UserHandler{Environments: ConfMappingOfEnvs})
 	service.RegisterHandler("/api/v2/configs/{environment}/users/{email}", "DELETE", &handlers.UserHandler{Environments: ConfMappingOfEnvs})
 	service.RegisterHandler("/api/v2/configs/{environment}/users/{email}", "POST", &handlers.UserHandler{Environments: ConfMappingOfEnvs})
 	service.RegisterHandler("/api/v2/configs/{environment}/users/{email}", "PUT", &handlers.UserHandler{Environments: ConfMappingOfEnvs})
+
 	service.RegisterHandler("/api/v1/kernels/{environment}", "GET", &handlers.KernelHandler{Environments: ConfMappingOfEnvs})
+	// keys
 	service.RegisterHandler("/api/v2/{app}/{env}/{key}", "GET", &handlers.KeyHandler{Environments: ConfMappingOfEnvs})
 	service.RegisterHandler("/api/v2/{app}/{env}/{key}/debug", "GET", &handlers.KeyHandler{Environments: ConfMappingOfEnvs})
+	// TODO add endpoints for configmaps
+
+	// endpoint for webhooks
+	service.RegisterHandlerFunction( webhooks_path, "POST", ApiHandlerWebhooksV2 )
 
 	service.StartServer(servicePort)
+
 	// TODO: Need to add side-cart container to stream the logs out
 	//
 	// TODO: Have better way to log and handle errors to avoid excessive prints
@@ -139,8 +152,8 @@ func main() {
 }
 
 func initializeEnvironment()  {
-	for _, envName := range confEnvNames {
 
+	for _, envName := range confEnvNames {
 		fs, repo, err := gitutil.GetRepoFromGit(githubAccount, githubApiToken, githubRepoName, envName)
 		if err != nil {
 			log.Error("-- Branch ", envName, " not intialized. Does it exist?")
@@ -149,7 +162,6 @@ func initializeEnvironment()  {
 		} else {
 			log.Info("-- Branch ", envName, " is intialized.")
 		}
-
 		ConfMappingOfEnvs[envName] = &environment.Environment{
 			FileSystem: fs,
 			Repository: repo,
@@ -168,8 +180,38 @@ func ApiHandlerReload(rw http.ResponseWriter, req *http.Request) {
 	rw.WriteHeader(http.StatusOK)
 }
 
+func ApiHandlerWebhooksV2(w http.ResponseWriter, r *http.Request) {
 
-// Depricated
+	payload, err := github.ValidatePayload(r, []byte("my-secret"))
+	if err != nil {
+		log.Error("error reading request body: err=%s\n", err)
+		return
+	}
+	defer r.Body.Close()
+
+	log.Debug("payload: %s", string(payload))
+	event, err := github.ParseWebHook( github.WebHookType(r), payload )
+	if err != nil {
+		log.Info("could not parse webhook: err=%s\n", err)
+		return
+	}
+
+	switch e := event.(type) {
+		case *github.PushEvent: // this is a commit push
+			log.Info("PushEvent")
+
+		case *github.PullRequestEvent:  // this is a pull request
+			log.Info("PullRequestEvent")
+
+		default:
+			log.Info("unknown event type %s\n", github.WebHookType(r))
+			return
+	}
+
+}
+
+
+// --- Depricated ---
 // Legacy code - needs to be cleaned up
 //
 
