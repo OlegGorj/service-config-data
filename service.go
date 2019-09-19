@@ -39,14 +39,11 @@ var (
 	confEnvNames       []string
 	)
 
-const (
-		webhooks_path = "/webhooks"
-)
-
 func init() {
 
 	viper.SetConfigName("config")
 	viper.AddConfigPath(".") ; viper.AddConfigPath("/")
+
 	err := viper.ReadInConfig()
 	if err != nil {
 		panic(fmt.Errorf("Fatal error config file: %s \n", err))
@@ -171,33 +168,26 @@ func initializeEnvironment()  {
 }
 
 func ApiHandlerWebhooksV2(w http.ResponseWriter, r *http.Request) {
+	temp := viper.New() ; temp.SetConfigName("creds") ; temp.AddConfigPath(".") ; viper.AddConfigPath("/")
 
-	log.Debug("ApiHandlerWebhooksV2 called")
-
-	payload, err := github.ValidatePayload(r, []byte("my-secret-apikey"))
+	payload, err := github.ValidatePayload(r, []byte( temp.GetString("git.git-hook-secret") ))
 	if err != nil {
 		log.Error("error reading request body: err=%s\n", err)
 		return
 	}
 	defer r.Body.Close()
-
-	log.Debug("payload: %s", string(payload))
+	//log.Debug("payload: %s", string(payload))
 	event, err := github.ParseWebHook( github.WebHookType(r), payload )
 	if err != nil {
-		log.Info("could not parse webhook: err=%s\n", err)
+		log.Error("could not parse webhook: err=%s\n", err)
 		return
 	}
 
 	switch e := event.(type) {
 		case *github.PushEvent: // this is a commit push
-			log.Info("PushEvent triggered - releading configs from backend")
-			fmt.Printf("User %s made commit to %s. \n", *e.Sender.Login, *e.Repo.FullName )
-
+			log.Info("------ User "+ *e.Sender.Login + " made commit to " + *e.Repo.FullName )
+			log.Info("------ PushEvent triggered - releading configs from backend")
 			initializeEnvironment()
-			_, err := w.Write([]byte(serviceApiVersion))
-			if err != nil {
-				log.Error("ERROR: Variable <g_api> is not defined properly")
-			}
 			w.WriteHeader(http.StatusOK)
 
 		case *github.PullRequestEvent:  // this is a pull request

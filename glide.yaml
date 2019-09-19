@@ -19,6 +19,7 @@ import:
   - plumbing
   - plumbing/object
   - storage/memory
+- package: github.com/google/go-github/github
 testImport:
 - package: gotest.tools
   subpackages:
