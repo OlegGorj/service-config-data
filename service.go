@@ -120,14 +120,15 @@ func main() {
 
 	log.Info("Starting service '" + serviceAppName + "'...")
 	log.Info("INFO: Starting config data service for '", githubRepoName, "' environment.. ")
-	// legacy handlers
+
+	// legacy handlers - have to clean up
 	service.RegisterHandlerFunction("/api", "GET", ApiHandler)
 	service.RegisterHandlerFunction("/api/v1/{app}/{env}/{key}", "GET", KeyHandler)
 	service.RegisterHandlerFunction("/api/v1/{app}/{env}/{key}/{debug}", "GET", KeyHandler)
-
-	// v2 handlers
 	service.RegisterHandlerFunction("/api/v2/reload", "GET", ApiHandlerReload)
-
+	//
+	// v2 handlers
+	//
 	service.RegisterHandler("/api/v2/configs/{environment}/users", "GET", &handlers.UsersHandler{Environments: ConfMappingOfEnvs})
 	service.RegisterHandler("/api/v2/configs/{environment}/users/{email}", "GET", &handlers.UserHandler{Environments: ConfMappingOfEnvs})
 	service.RegisterHandler("/api/v2/configs/{environment}/users/{email}", "DELETE", &handlers.UserHandler{Environments: ConfMappingOfEnvs})
@@ -135,13 +136,13 @@ func main() {
 	service.RegisterHandler("/api/v2/configs/{environment}/users/{email}", "PUT", &handlers.UserHandler{Environments: ConfMappingOfEnvs})
 
 	service.RegisterHandler("/api/v1/kernels/{environment}", "GET", &handlers.KernelHandler{Environments: ConfMappingOfEnvs})
-	// keys
+	// keys endpoints
 	service.RegisterHandler("/api/v2/{app}/{env}/{key}", "GET", &handlers.KeyHandler{Environments: ConfMappingOfEnvs})
 	service.RegisterHandler("/api/v2/{app}/{env}/{key}/debug", "GET", &handlers.KeyHandler{Environments: ConfMappingOfEnvs})
 	// TODO add endpoints for configmaps
 
 	// endpoint for webhooks
-	service.RegisterHandlerFunction( viper.GetString("service.backend.webhook_path") /* webhooks_path */, "POST", ApiHandlerWebhooksV2 )
+	service.RegisterHandlerFunction( viper.GetString("service.backend.webhook_path"), "POST", ApiHandlerWebhooksV2 )
 
 	service.StartServer(servicePort)
 
@@ -169,20 +170,11 @@ func initializeEnvironment()  {
 	}
 }
 
-func ApiHandlerReload(rw http.ResponseWriter, req *http.Request) {
-
-	initializeEnvironment()
-
-	_, err := rw.Write([]byte(serviceApiVersion))
-	if err != nil {
-		log.Error("ERROR: Variable <g_api> is not defined properly")
-	}
-	rw.WriteHeader(http.StatusOK)
-}
-
 func ApiHandlerWebhooksV2(w http.ResponseWriter, r *http.Request) {
 
-	payload, err := github.ValidatePayload(r, []byte("my-secret"))
+	log.Debug("ApiHandlerWebhooksV2 called")
+
+	payload, err := github.ValidatePayload(r, []byte("1234567890"))
 	if err != nil {
 		log.Error("error reading request body: err=%s\n", err)
 		return
@@ -198,7 +190,15 @@ func ApiHandlerWebhooksV2(w http.ResponseWriter, r *http.Request) {
 
 	switch e := event.(type) {
 		case *github.PushEvent: // this is a commit push
-			log.Info("PushEvent")
+			log.Info("PushEvent triggered - releading configs from backend")
+			fmt.Printf("User %s made commit to %s. \n", *e.Sender.Login, *e.Repo.FullName )
+
+			initializeEnvironment()
+			_, err := w.Write([]byte(serviceApiVersion))
+			if err != nil {
+				log.Error("ERROR: Variable <g_api> is not defined properly")
+			}
+			w.WriteHeader(http.StatusOK)
 
 		case *github.PullRequestEvent:  // this is a pull request
 			log.Info("PullRequestEvent")
@@ -210,7 +210,7 @@ func ApiHandlerWebhooksV2(w http.ResponseWriter, r *http.Request) {
 
 }
 
-
+// ----------------------------------------------------------------------------------
 // --- Depricated ---
 // Legacy code - needs to be cleaned up
 //
@@ -222,6 +222,16 @@ func ApiHandler(rw http.ResponseWriter, req *http.Request) {
 	rw.WriteHeader(http.StatusOK)
 }
 
+func ApiHandlerReload(rw http.ResponseWriter, req *http.Request) {
+
+	initializeEnvironment()
+
+	_, err := rw.Write([]byte(serviceApiVersion))
+	if err != nil {
+		log.Error("ERROR: Variable <g_api> is not defined properly")
+	}
+	rw.WriteHeader(http.StatusOK)
+}
 
 //
 func KeyHandler(rw http.ResponseWriter, req *http.Request) {

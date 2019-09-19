@@ -7,7 +7,7 @@ include vars-gcp.mk
 
 APP?=service-config-data
 APIVER?=v2
-RELEASE?=1.3
+RELEASE?=1.4
 IMAGE?=${REGISTRY}/${APP}:${RELEASE}
 DOCKER_ORG?=oleggorj
 
@@ -68,6 +68,7 @@ deploy:
 		-helm install --name ${K8S_CHART} --values ./charts/${K8S_CHART}/values.yaml --namespace ${K8S_NAMESPACE}  ./charts/${K8S_CHART}/
 		-rm ./charts/${K8S_CHART}/values.yaml
 		kubectl get services --all-namespaces | grep ${APP}
+		./scripts/wait4ip.sh service-config-data
 
 
 .PHONY: glide
@@ -79,23 +80,3 @@ endif
 .PHONY: deps
 deps: glide
 		glide install
-
-
-deploy-upgrade:
-				echo ""
-				echo "*** did you run 'make push'? ***"
-				echo ""
-				for t in $(shell find ./charts/${K8S_CHART} -type f -name "values-template.yaml"); do \
-							cat $$t | \
-								sed -E "s/{{ .ServiceName }}/$(APP)/g" | \
-								sed -E "s/{{ .Release }}/$(RELEASE)/g" | \
-								sed -E "s/{{ .Env }}/$(ENV)/g" | \
-								sed -E "s/{{ .Kube_namespace }}/$(K8S_NAMESPACE)/g" | \
-								sed -E "s/{{ .ApiVer }}/$(APIVER)/g" | \
-								sed -E "s/{{ .LBPort }}/$(LB_EXTERNAL_PORT)/g" | \
-								sed -E "s/{{ .ContainerPort }}/$(PORT)/g" | \
-								sed -E "s/{{ .DockerOrg }}/$(DOCKER_ORG)/g"; \
-				done > ./charts/${K8S_CHART}/values.yaml
-				-helm upgrade  ${K8S_CHART} --values ./charts/${K8S_CHART}/values.yaml --namespace ${K8S_NAMESPACE}  ./charts/${K8S_CHART}/
-				-rm ./charts/${K8S_CHART}/values.yaml
-				kubectl get services --all-namespaces | grep ${APP}

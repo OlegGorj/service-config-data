@@ -3,10 +3,10 @@
     "name" : "service-config-data",
     "port" : "8000",
     "apiver" : "2",
-
     "backend":{
       "type": "git",
       "repo" : "github.com/OlegGorJ/config-data.git",
+      "webhook_path" : "/webhook_git",
       "account" : "",
       "token" : "",
       "git-creds-file": "credentials.json",
