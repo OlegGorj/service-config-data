@@ -1,0 +1,11 @@
+{
+  "name": "web",
+  "active": true,
+  "events": ["push"],
+  "config": {
+    "url": "http://{{ .ServiceIp }}:{{ .ServicePort }}/{{ .WebhookGit }}",
+    "content_type": "json",
+    "insecure_ssl": "0",
+    "secret": "1234567890"
+  }
+}
