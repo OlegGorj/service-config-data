@@ -8,8 +8,7 @@ include vars-gcp.mk
 APP?=service-config-data
 APIVER?=v2
 RELEASE?=1.4
-IMAGE?=${REGISTRY}/${APP}:${RELEASE}
-DOCKER_ORG?=oleggorj
+IMAGE?=${DOCKER_ORG}/${APP}:${RELEASE}
 
 PORT?=8000
 LB_EXTERNAL_PORT?=8000
@@ -68,7 +67,7 @@ deploy:
 		-helm install --name ${K8S_CHART} --values ./charts/${K8S_CHART}/values.yaml --namespace ${K8S_NAMESPACE}  ./charts/${K8S_CHART}/
 		-echo "Cleaning up temp files.." && rm ./charts/${K8S_CHART}/values.yaml
 		kubectl get services --all-namespaces | grep ${APP}
-		./scripts/githook.sh service-config-data ${LB_EXTERNAL_PORT} webhook_git oleggorj config-data
+		./scripts/githook.sh ${APP} ${LB_EXTERNAL_PORT} webhook_git ${GITUSER} ${GITREPO}
 
 
 .PHONY: glide
