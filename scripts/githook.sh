@@ -78,7 +78,7 @@ function create_githook() {
           sed -E "s/{{ .ServicePort }}/${6}/g"; \
   done  > ./hook.json
   # create githook
-  HOOK=$(${CURL} -s -H "Authorization: token ${3}"  -H "Content-Type: application/json" -vX POST -d @hook.json https://$GITAPIURL/repos/${2}/${1}/hooks)
+  HOOK=$(${CURL} -s -H "Authorization: token ${3}"  -H "Content-Type: application/json" -X POST -d @hook.json https://$GITAPIURL/repos/${2}/${1}/hooks)
   if jq -e .type >/dev/null 2>&1 <<<"$HOOK"; then
     printf $GREEN && printf $BRIGHT && echo "Githook created successfully: " $HOOK && printf $NORMAL
     ret_val=0
@@ -90,4 +90,4 @@ function create_githook() {
 }
 
 create_githook $GIT_REPO $GIT_USER $TOKEN $EXTERNAL_IP $ENDPOINT $SERVICE_PORT  && githook_status=$ret_val
-echo $githook_status
+#echo $githook_status
