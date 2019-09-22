@@ -7,7 +7,7 @@ GIT_REPO=$5
 # get git tocken
 TOKEN=$(jq  '.git.access_token' creds.json | tr -d '"')
 
-source ./scripts/common.sh
+source ./common.sh
 
 # ARGS:
 # 1 - service name
@@ -22,13 +22,12 @@ function wait4external_ip(){
     external_ip=$(kubectl get svc $1 --template="{{range .status.loadBalancer.ingress}}{{.ip}}{{end}}")
     [ -z "$external_ip" ]  && sleep 1
   done
-  #echo -ne "${external_ip}\r"
   echo -ne "\n"
   ret_val=$external_ip
 }
 
 printf $BLUE && printf $BRIGHT &&  wait4external_ip $SERVICE_NAME && EXTERNAL_IP=$ret_val && printf $NORMAL
-printf $GREEN && printf $BRIGHT && printf $BLINK && echo "Service is running on IP: $EXTERNAL_IP:$SERVICE_PORT "  && printf $NORMAL
+printf $GREEN && printf $BRIGHT && printf $BLINK && echo "Service is running on IP: ${EXTERNAL_IP}:${SERVICE_PORT}"  && printf $NORMAL
 
 # ARGS:
 # 1 - Repo
@@ -38,7 +37,7 @@ printf $GREEN && printf $BRIGHT && printf $BLINK && echo "Service is running on 
 function check_githook() {
   # list all githooks
   ret_val=0
-  HOOKSLIST=$(curl -s -H "Authorization: token ${3}"  -H "Content-Type: application/json" -X GET https://$GITAPIURL/repos/${2}/${1}/hooks )
+  HOOKSLIST=$(${CURL} -s -H "Authorization: token ${3}"  -H "Content-Type: application/json" -X GET https://$GITAPIURL/repos/${2}/${1}/hooks )
   if [ 0 -ne $? ]; then
     printf $BLUE && printf $RED && printf "Something went wrong.. Curl output: " $HOOKSLIST && printf $NORMAL
     ret_val=1
@@ -79,7 +78,7 @@ function create_githook() {
           sed -E "s/{{ .ServicePort }}/${6}/g"; \
   done  > ./hook.json
   # create githook
-  HOOK=$(curl -H "Authorization: token ${3}"  -H "Content-Type: application/json" -vX POST -d @hook.json https://$GITAPIURL/repos/${2}/${1}/hooks)
+  HOOK=$(${CURL} -s -H "Authorization: token ${3}"  -H "Content-Type: application/json" -vX POST -d @hook.json https://$GITAPIURL/repos/${2}/${1}/hooks)
   if jq -e .type >/dev/null 2>&1 <<<"$HOOK"; then
     printf $GREEN && printf $BRIGHT && echo "Githook created successfully: " $HOOK && printf $NORMAL
     ret_val=0
@@ -87,6 +86,7 @@ function create_githook() {
     printf $RED && printf $BRIGHT && echo "Something went wrong. Message from curl call: " $HOOK && printf $NORMAL
     ret_val=1
   fi
+  rm hook.json
 }
 
 create_githook $GIT_REPO $GIT_USER $TOKEN $EXTERNAL_IP $ENDPOINT $SERVICE_PORT  && githook_status=$ret_val
