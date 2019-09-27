@@ -5,6 +5,7 @@ ENDPOINT=$3
 GIT_USER=$4
 GIT_REPO=$5
 KUBE_NS=$6
+
 # get git tocken
 TOKEN=$(jq  '.git.access_token' creds.json | tr -d '"')
 
