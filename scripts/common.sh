@@ -1,5 +1,4 @@
 #!/bin/bash
-
 BLACK=$(tput setaf 0)
 RED=$(tput setaf 1)
 GREEN=$(tput setaf 2)
@@ -17,5 +16,4 @@ REVERSE=$(tput smso)
 UNDERLINE=$(tput smul)
 
 export GITAPIURL=api.github.com
-
 export CURL=$(which curl)
