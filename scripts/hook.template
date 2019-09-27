@@ -8,4 +8,5 @@
     "insecure_ssl": "0",
     "secret": "{{ .WebhookGitSecret }}"
   }
+  
 }
