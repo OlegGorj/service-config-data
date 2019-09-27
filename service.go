@@ -119,23 +119,25 @@ func main() {
 	log.Info("INFO: Starting config data service for '", githubRepoName, "' environment.. ")
 
 	// legacy handlers - have to clean up
-	service.RegisterHandlerFunction("/api", "GET", ApiHandler)
 	service.RegisterHandlerFunction("/api/v1/{app}/{env}/{key}", "GET", KeyHandler)
 	service.RegisterHandlerFunction("/api/v1/{app}/{env}/{key}/{debug}", "GET", KeyHandler)
-	service.RegisterHandlerFunction("/api/v2/reload", "GET", ApiHandlerReload)
+
 	//
 	// v2 handlers
 	//
+	service.RegisterHandlerFunction("/api", "GET", ApiHandler)
+	service.RegisterHandlerFunction("/api/v2/reload", "GET", ApiHandlerReload)
 	service.RegisterHandler("/api/v2/configs/{environment}/users", "GET", &handlers.UsersHandler{Environments: ConfMappingOfEnvs})
 	service.RegisterHandler("/api/v2/configs/{environment}/users/{email}", "GET", &handlers.UserHandler{Environments: ConfMappingOfEnvs})
 	service.RegisterHandler("/api/v2/configs/{environment}/users/{email}", "DELETE", &handlers.UserHandler{Environments: ConfMappingOfEnvs})
 	service.RegisterHandler("/api/v2/configs/{environment}/users/{email}", "POST", &handlers.UserHandler{Environments: ConfMappingOfEnvs})
 	service.RegisterHandler("/api/v2/configs/{environment}/users/{email}", "PUT", &handlers.UserHandler{Environments: ConfMappingOfEnvs})
-
 	service.RegisterHandler("/api/v1/kernels/{environment}", "GET", &handlers.KernelHandler{Environments: ConfMappingOfEnvs})
+
 	// keys endpoints
 	service.RegisterHandler("/api/v2/{app}/{env}/{key}", "GET", &handlers.KeyHandler{Environments: ConfMappingOfEnvs})
 	service.RegisterHandler("/api/v2/{app}/{env}/{key}/debug", "GET", &handlers.KeyHandler{Environments: ConfMappingOfEnvs})
+
 	// TODO add endpoints for configmaps
 
 	// endpoint for webhooks
