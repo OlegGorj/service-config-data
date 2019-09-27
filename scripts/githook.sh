@@ -6,10 +6,13 @@ GIT_USER=$4
 GIT_REPO=$5
 KUBE_NS=$6
 
+# TODO check args
+
 # get git tocken
 TOKEN=$(jq  '.git.access_token' creds.json | tr -d '"')
 
 source ./scripts/common.sh
+
 
 # ARGS:
 # 1 - service name
