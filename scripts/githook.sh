@@ -4,10 +4,11 @@ SERVICE_PORT=$2
 ENDPOINT=$3
 GIT_USER=$4
 GIT_REPO=$5
+KUBE_NS=$6
 # get git tocken
 TOKEN=$(jq  '.git.access_token' creds.json | tr -d '"')
 
-source ./common.sh
+source ./scripts/common.sh
 
 # ARGS:
 # 1 - service name
@@ -19,7 +20,7 @@ function wait4external_ip(){
   echo -n ' '
   while [ -z $external_ip ]; do
     echo -ne "\b${sp:i++%${#sp}:1}"
-    external_ip=$(kubectl get svc $1 --template="{{range .status.loadBalancer.ingress}}{{.ip}}{{end}}")
+    external_ip=$(kubectl get svc $1 --namespace=$KUBE_NS --template="{{range .status.loadBalancer.ingress}}{{.ip}}{{end}}")
     [ -z "$external_ip" ]  && sleep 1
   done
   echo -ne "\n"
@@ -27,7 +28,7 @@ function wait4external_ip(){
 }
 
 printf $BLUE && printf $BRIGHT &&  wait4external_ip $SERVICE_NAME && EXTERNAL_IP=$ret_val && printf $NORMAL
-printf $GREEN && printf $BRIGHT && printf $BLINK && echo "Service is running on IP: ${EXTERNAL_IP}:${SERVICE_PORT}"  && printf $NORMAL
+printf $GREEN && printf $BRIGHT && echo "Service is running on IP: ${EXTERNAL_IP}:${SERVICE_PORT}"  && printf $NORMAL
 
 # ARGS:
 # 1 - Repo
