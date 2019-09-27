@@ -17,3 +17,4 @@ REVERSE=$(tput smso)
 UNDERLINE=$(tput smul)
 
 export GITAPIURL=api.github.com
+export CURL=$(which curl)
