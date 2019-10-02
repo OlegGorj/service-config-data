@@ -34,7 +34,7 @@ func (u *KeyHandler) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
 	//serviceDebugFlag := false
 	appValue := strings.ToLower(mux.Vars(req)["app"])
 	envValue := strings.ToLower(mux.Vars(req)["env"])
-	keyValue := strings.Replace( mux.Vars(req)["key"] , "@","#",-1) // mux.Vars(req)["key"]
+	keyValue := strings.Replace( mux.Vars(req)["key"] , "@","#",-1)
 	if appValue == "" || envValue == "" || keyValue == "" {
 		log.Error("ERROR: <app>, <env> or <key> can not be empty.\n")
 		rw.WriteHeader(http.StatusNotAcceptable)
