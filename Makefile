@@ -7,14 +7,19 @@ include vars-gcp.mk
 
 APP?=service-config-data
 APIVER?=v2
-RELEASE?=1.4
+RELEASE?=1.5
 IMAGE?=${DOCKER_ORG}/${APP}:${RELEASE}
 
-ENV?=SANDBOX
+ENV?=DEV
 
 K8S_CHART?=service-config
-K8S_NAMESPACE?=default
+K8S_NAMESPACE?=dev
 NODESELECTOR?=services
+
+helm:
+		kubectl create serviceaccount --namespace kube-system tiller
+		kubectl create clusterrolebinding tiller-cluster-rule --clusterrole=cluster-admin --serviceaccount=kube-system:tiller
+		helm init --service-account tiller --upgrade
 
 clean:
 		rm -f ${APP}
@@ -47,7 +52,7 @@ container: build
 		rm -f ${APP}
 
 deployclean:
-		helm del --purge ${K8S_CHART}
+		helm del --purge "${K8S_CHART}-${K8S_NAMESPACE}"
 
 deploy:
 		for t in $(shell find ./charts/${K8S_CHART} -type f -name "values-template.yaml"); do \
@@ -61,10 +66,10 @@ deploy:
 						sed -E "s/{{ .ContainerPort }}/$(PORT)/g" | \
 						sed -E "s/{{ .DockerOrg }}/$(DOCKER_ORG)/g"; \
 		done > ./charts/${K8S_CHART}/values.yaml
-		-helm install --name ${K8S_CHART} --values ./charts/${K8S_CHART}/values.yaml --namespace ${K8S_NAMESPACE}  ./charts/${K8S_CHART}/
-		-echo "Cleaning up temp files.." && rm ./charts/${K8S_CHART}/values.yaml
+		helm install --name "${K8S_CHART}-${K8S_NAMESPACE}" --values ./charts/${K8S_CHART}/values.yaml --namespace ${K8S_NAMESPACE}  ./charts/${K8S_CHART}/
+		echo "Cleaning up temp files.." && rm ./charts/${K8S_CHART}/values.yaml
 		kubectl get services --all-namespaces | grep ${APP}
-		./scripts/githook.sh ${APP} ${LB_EXTERNAL_PORT} webhook_git ${GITUSER} ${GITREPO}
+		#./scripts/githook.sh ${APP} ${LB_EXTERNAL_PORT} webhook_git ${GITUSER} ${GITREPO} ${K8S_NAMESPACE}
 
 
 .PHONY: glide
