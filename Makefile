@@ -69,7 +69,7 @@ deploy:
 		helm install --name "${K8S_CHART}-${K8S_NAMESPACE}" --values ./charts/${K8S_CHART}/values.yaml --namespace ${K8S_NAMESPACE}  ./charts/${K8S_CHART}/
 		echo "Cleaning up temp files.." && rm ./charts/${K8S_CHART}/values.yaml
 		kubectl get services --all-namespaces | grep ${APP}
-		#./scripts/githook.sh ${APP} ${LB_EXTERNAL_PORT} webhook_git ${GITUSER} ${GITREPO} ${K8S_NAMESPACE}
+		./scripts/githook.sh ${APP} ${LB_EXTERNAL_PORT} webhook_git ${GITUSER} ${GITREPO} ${K8S_NAMESPACE}
 
 
 .PHONY: glide
